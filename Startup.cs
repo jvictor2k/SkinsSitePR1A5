@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SkinsSite.Context;
+using SkinsSite.Models;
 using SkinsSite.Repositories;
 using SkinsSite.Repositories.Interfaces;
 
@@ -22,6 +23,7 @@ public class Startup
         services.AddTransient<ISkinRepository, SkinRepository>();
         services.AddTransient<ICategoriaRepository, CategoriaRepository>();
         services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+        services.AddScoped(sp => CarrinhoCompra.GetCarrinho(sp));
 
         services.AddControllersWithViews();
 
