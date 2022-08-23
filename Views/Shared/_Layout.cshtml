@@ -19,12 +19,13 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     @await Component.InvokeAsync("CarrinhoCompraResumo")
+                    @await Component.InvokeAsync("CategoriaMenu")
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
                             <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-light" asp-area="" asp-controller="skin" asp-action="List">Skin</a>
+                            @*<a class="nav-link text-light" asp-area="" asp-controller="skin" asp-action="List">Skin</a>*@
                         </li>
                         <li>
                             <a class="nav-link text-light" asp-area="" asp-controller="Contato" asp-action="Index">Contato</a>

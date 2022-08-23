@@ -28,7 +28,7 @@ public class Startup
         services.AddControllersWithViews();
 
         services.AddMemoryCache();
-        
+
         services.AddSession();
     }
 
@@ -55,6 +55,11 @@ public class Startup
 
         app.UseEndpoints(endpoints =>
         {
+            endpoints.MapControllerRoute(
+               name: "categoriaFiltro",
+               pattern: "Skin/{action}/{categoria?}",
+               defaults: new { Controller = "Skin", action = "List" });
+
             endpoints.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
