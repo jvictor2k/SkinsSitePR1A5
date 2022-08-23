@@ -26,18 +26,10 @@ namespace SkinsSite.Controllers
             }
             else
             {
-                if(string.Equals("Facas", categoria, StringComparison.OrdinalIgnoreCase))
-                {
-                    skins = _skinRepository.Skins
-                        .Where(s => s.Categoria.CategoriaNome.Equals("Facas"))
-                        .OrderBy(s => s.Nome);
-                }
-                else
-                {
-                    skins = _skinRepository.Skins
-                        .Where(s => s.Categoria.CategoriaNome.Equals("Luvas"))
-                        .OrderBy(s => s.Nome);
-                }
+                skins = _skinRepository.Skins
+                    .Where(s => s.Categoria.CategoriaNome.Equals(categoria))
+                    .OrderBy(s => s.Nome);
+
                 categoriaAtual = categoria;
             }
 
