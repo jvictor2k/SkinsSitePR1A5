@@ -30,7 +30,7 @@ namespace SkinsSite.Controllers
             return View(carrinhoCompraVM);
         }
 
-        public RedirectToActionResult AdicionarItemNoCarrinho(int skinId)
+        public IActionResult AdicionarItemNoCarrinhoCompra(int skinId)
         {
             var skinSelecionado = _skinRepository.Skins.FirstOrDefault(p => p.SkinId == skinId);
             if (skinSelecionado != null)

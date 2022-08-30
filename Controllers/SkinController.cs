@@ -41,5 +41,11 @@ namespace SkinsSite.Controllers
 
             return View(skinsListViewModel);
         }
+
+        public IActionResult Details(int skinId)
+        {
+            var skin = _skinRepository.Skins.FirstOrDefault(s => s.SkinId == skinId);
+            return View(skin);
+        }
     }
 }

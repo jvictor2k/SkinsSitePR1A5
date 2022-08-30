@@ -1,9 +1,22 @@
 ﻿@model Skin
 
 <div class="col-sm-4 col-md-4 col-lg-4">
-    <h3>@Model.Tipo - @Model.Nome</h3>
-    <h5>@Model.Estado</h5>
-    <h7> 0.@Model.SkinFloat</h7>
-    <div><img src="@Model.ImagemUrl" width=100%></div>
-    <p>@Model.Preco.ToString("c")</p>
+    <p><img src="@Model.ImagemUrl" class="img-fluid"></p>
+    <h3>Preço : @Model.Preco.ToString("c")</h3>
+
+    <h4>
+    <a asp-controller="Skin" asp-action="Details"
+    asp-route-skinId="@Model.SkinId">@Model.Nome</a>
+    </h4>
+
+    <p>@Model.DescricaoCurta</p>
+
+    <div>
+        <p class="button">
+            <a class="btn btn-primary" id="cartButton" asp-controller="CarrinhoCompra"
+            asp-action="AdicionarItemNoCarrinhoCompra" asp-route-SkinId="@Model.SkinId">
+        Incluir no Carrinho
+        </a>
+        </p>
+    </div>
 </div>
