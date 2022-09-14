@@ -30,6 +30,13 @@
                         <li>
                             <a class="nav-link text-light" asp-area="" asp-controller="Contato" asp-action="Index">Contato</a>
                         </li>
+                        <li>
+                            <form class="navbar-form navbar-right" asp-controller="Skin" asp-action="Search" method="get">
+                                <div class="form-group">
+                                    <input type="text" class="form-control" placeholder="Procurar produto" name="searchString" value="@ViewData["searchString"]" />
+                                </div>
+                            </form>
+                        </li>
                     </ul>
                 </div>
             </div>

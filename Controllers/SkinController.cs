@@ -47,5 +47,37 @@ namespace SkinsSite.Controllers
             var skin = _skinRepository.Skins.FirstOrDefault(s => s.SkinId == skinId);
             return View(skin);
         }
+
+        public ViewResult Search(string searchString)
+        {
+            IEnumerable<Skin> skins;
+            string categoriaAtual = string.Empty;
+
+            if (string.IsNullOrEmpty(searchString))
+            {
+                skins = _skinRepository.Skins.OrderBy(p => p.SkinId);
+                categoriaAtual = "Todas as Skins";
+            }
+            else
+            {
+                skins = _skinRepository.Skins
+                        .Where(p => p.Nome.ToLower().Contains(searchString.ToLower()));
+
+                if (skins.Any())
+                {
+                    categoriaAtual = "Skins";
+                }
+                else
+                {
+                    categoriaAtual = "Nenhuma skin foi encontrada";
+                }
+            }
+
+            return View("~/Views/Skin/List.cshtml", new SkinListViewModel
+            {
+                Skins = skins,
+                CategoriaAtual = categoriaAtual
+            });
+        }
     }
 }
