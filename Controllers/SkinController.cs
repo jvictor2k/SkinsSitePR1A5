@@ -67,9 +67,19 @@ namespace SkinsSite.Controllers
                 {
                     categoriaAtual = "Skins";
                 }
-                else
+                else if (skins.Any() == false)
                 {
-                    categoriaAtual = "Nenhuma skin foi encontrada";
+                    skins = _skinRepository.Skins
+                        .Where(p => p.Tipo.ToLower().Contains(searchString.ToLower()));
+
+                    if (skins.Any())
+                    {
+                        categoriaAtual = "Tipo";
+                    }
+                    else
+                    {
+                        categoriaAtual = "Nenhuma skin foi encontrada";
+                    }
                 }
             }
 
