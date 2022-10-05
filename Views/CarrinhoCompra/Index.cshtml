@@ -3,10 +3,10 @@
 <div class="container">
 <div class="row">
 
-    <img src="~/images/shopping-cart.png"/>
-
     <div>
-        <h4> Seu carrinho de compras: </h4>
+        <h4> Seu carrinho de compras:
+        <img src="~/images/shoppingcart.png"/>
+        </h4>
     </div>
 
     <table class="table table-bordered table-striped">
@@ -35,7 +35,7 @@
 
                         <td class="text-center">
                             <a asp-controller="CarrinhoCompra" asp-action="RemoverItemDoCarrinhoCompra"
-                               asp-route-skinId="@item.Skin.SkinId"><img src="~/images/deletar-lixeira.png" />
+                               asp-route-skinId="@item.Skin.SkinId"><img src="~/images/deletar-lixeira.png" height="3%" width="3%"/>
                             </a>
                     </tr>
             }
