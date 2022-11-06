@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SkinsSite.Models;
 using SkinsSite.Repositories.Interfaces;
 using SkinsSite.ViewModels;
@@ -30,6 +31,7 @@ namespace SkinsSite.Controllers
             return View(carrinhoCompraVM);
         }
 
+        [Authorize]
         public IActionResult AdicionarItemNoCarrinhoCompra(int skinId)
         {
             var skinSelecionado = _skinRepository.Skins.FirstOrDefault(p => p.SkinId == skinId);
@@ -40,6 +42,7 @@ namespace SkinsSite.Controllers
             return RedirectToAction("Index");
         }
 
+        [Authorize]
         public IActionResult RemoverItemDoCarrinhoCompra(int skinId)
         {
             var skinSelecionado = _skinRepository.Skins.FirstOrDefault(p => p.SkinId == skinId);

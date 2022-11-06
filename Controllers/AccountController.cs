@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SkinsSite.ViewModels;
+using System.Diagnostics.Contracts;
 using System.Drawing;
 
 namespace SkinsSite.Controllers
@@ -65,6 +66,7 @@ namespace SkinsSite.Controllers
 
                 if(result.Succeeded)
                 {
+                    await _userManager.AddToRoleAsync(user, "Member");
                     return RedirectToAction("Login", "Account");
                 }
                 else
@@ -82,6 +84,11 @@ namespace SkinsSite.Controllers
             HttpContext.User = null;
             await _signInManager.SignOutAsync();
             return RedirectToAction("Index", "Home");
+        }
+
+        public IActionResult AccessDenied()
+        {
+            return View();
         }
     }
 }
