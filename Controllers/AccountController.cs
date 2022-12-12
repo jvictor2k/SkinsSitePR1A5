@@ -1,11 +1,11 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SkinsSite.ViewModels;
-using System.Diagnostics.Contracts;
-using System.Drawing;
 
 namespace SkinsSite.Controllers
 {
+    [Authorize]
     public class AccountController : Controller
     {
         private readonly UserManager<IdentityUser> _userManager;
@@ -18,6 +18,7 @@ namespace SkinsSite.Controllers
             _signInManager = signInManager;
         }
 
+        [AllowAnonymous]
         public IActionResult Login(string returnUrl)
         {
             return View(new LoginViewModel()
@@ -26,6 +27,7 @@ namespace SkinsSite.Controllers
             });
         }
 
+        [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel loginVM)
         {
@@ -36,7 +38,9 @@ namespace SkinsSite.Controllers
 
             if (user != null)
             {
-                var result = await _signInManager.PasswordSignInAsync(user, loginVM.Password, false, false);
+                var result = await _signInManager.PasswordSignInAsync(user, 
+                    loginVM.Password, false, false);
+
                 if (result.Succeeded)
                 {
                     if(string.IsNullOrEmpty(loginVM.ReturnUrl))
@@ -48,13 +52,15 @@ namespace SkinsSite.Controllers
             }
             ModelState.AddModelError("", "Falha ao realizar o login!");
             return View(loginVM);
-        }
+        }//
 
+        [AllowAnonymous]
         public IActionResult Register()
         {
             return View();
         }
 
+        [AllowAnonymous]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(LoginViewModel registroVM)
@@ -66,6 +72,7 @@ namespace SkinsSite.Controllers
 
                 if(result.Succeeded)
                 {
+                    //await _signInManger.SignInAsync(user, IsPersistent: false);
                     await _userManager.AddToRoleAsync(user, "Member");
                     return RedirectToAction("Login", "Account");
                 }
@@ -77,6 +84,7 @@ namespace SkinsSite.Controllers
             return View(registroVM);
         }
 
+        [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> Logout()
         {

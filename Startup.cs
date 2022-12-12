@@ -5,6 +5,7 @@ using SkinsSite.Models;
 using SkinsSite.Repositories;
 using SkinsSite.Repositories.Interfaces;
 using SkinsSite.Services;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace SkinsSite;
 public class Startup
@@ -16,7 +17,6 @@ public class Startup
 
     public IConfiguration Configuration { get; }
 
-    // This method gets called by the runtime. Use this method to add services to the container.
     public void ConfigureServices(IServiceCollection services)
     {
         services.AddDbContext<AppDbContext>(options =>
@@ -26,16 +26,16 @@ public class Startup
             .AddEntityFrameworkStores<AppDbContext>()
             .AddDefaultTokenProviders();
 
-        services.Configure<IdentityOptions>(options =>
-        {
-            //Default Password settings.
-            options.Password.RequireDigit = true;
-            options.Password.RequireLowercase = false;
-            options.Password.RequireNonAlphanumeric = false;
-            options.Password.RequireUppercase = false;
-            options.Password.RequiredLength = 8;
-            options.Password.RequiredUniqueChars = 0;
-        });
+        //services.Configure<IdentityOptions>(options =>
+        //{
+        //    //Default Password settings.
+        //    options.Password.RequireDigit = true;
+        //    options.Password.RequireLowercase = false;
+        //    options.Password.RequireNonAlphanumeric = false;
+        //    options.Password.RequireUppercase = false;
+        //    options.Password.RequiredLength = 8;
+        //    options.Password.RequiredUniqueChars = 0;
+        //});
 
         services.AddTransient<ISkinRepository, SkinRepository>();
         services.AddTransient<ICategoriaRepository, CategoriaRepository>();
@@ -57,11 +57,16 @@ public class Startup
         services.AddControllersWithViews();
 
         services.AddMemoryCache();
+        //services.AddDistributionMemoryCache();
 
         services.AddSession();
+        //{
+        //    options.IdleTimeout = TimeSpan.FromSeconds(10);
+        //    options.Cookie.HttpOnly = true;
+        //    options.Cookie.IsEssential = true;
+        //});
     }
 
-    // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
     public void Configure(IApplicationBuilder app, 
         IWebHostEnvironment env, ISeedUserRoleInitial seedUserRoleInitial)
     {
@@ -72,7 +77,6 @@ public class Startup
         else
         {
             app.UseExceptionHandler("/Home/Error");
-            // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
             app.UseHsts();
         }
         app.UseHttpsRedirection();
