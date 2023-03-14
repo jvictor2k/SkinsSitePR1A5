@@ -1,0 +1,12 @@
+﻿@model SkinListViewModel
+<hr />
+<h1>@Model.CategoriaAtual</h1>
+<hr />
+<div class="container">
+    <div class="row">
+        @foreach (var skin in Model.Skins)
+        {
+            <partial name="_SkinsResumo" for="@skin"/>
+        }
+    </div>
+</div>

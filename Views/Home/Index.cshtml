@@ -1,0 +1,13 @@
+﻿@model HomeViewModel
+
+<partial name="_Carousel"/>
+<br />
+<h2>Skins que dão Skill:</h2>
+<br />
+
+<div class="row">
+    @foreach (var skin in Model.SkinsPreferidas)
+    {
+        <partial name="_SkinsResumo" for="@skin" />
+    }
+</div>

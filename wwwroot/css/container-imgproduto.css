@@ -1,0 +1,7 @@
+﻿.container-imgproduto > img {
+    float: left;
+    width: 400px;
+    height: 400px;
+    object-fit: cover;
+    padding-bottom: 15px;
+}
