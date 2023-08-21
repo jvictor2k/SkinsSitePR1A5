@@ -32,19 +32,7 @@ Total de Pedidos: @Model.TotalRecordCount
                 @Html.DisplayNameFor(model => model.Sobrenome)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Endereco1)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Endereco2)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Cep)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Estado)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Cidade)
+                @Html.DisplayNameFor(model => model.TradeLink)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Telefone)
@@ -71,19 +59,7 @@ Total de Pedidos: @Model.TotalRecordCount
                 @Html.DisplayFor(modelItem => item.Sobrenome)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Endereco1)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Endereco2)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Cep)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Estado)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Cidade)
+                @Html.DisplayFor(modelItem => item.TradeLink)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Telefone)
@@ -100,7 +76,6 @@ Total de Pedidos: @Model.TotalRecordCount
             <td>
                 <a asp-action="Edit" asp-route-id="@item.PedidoId">Editar</a> |
                 <a asp-action="Details" asp-route-id="@item.PedidoId">Detalhes</a> |
-                <a asp-action="Delete" asp-route-id="@item.PedidoId">Deletar</a> |
                 <a asp-action="PedidoSkins" asp-route-id="@item.PedidoId">Ver Itens</a>
             </td>
         </tr>
