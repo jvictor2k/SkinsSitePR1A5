@@ -1,11 +1,11 @@
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using SkinsSite.Areas.Admin.Services;
 using SkinsSite.Context;
 using SkinsSite.Models;
-using SkinsSite.Repositories;
 using SkinsSite.Repositories.Interfaces;
+using SkinsSite.Repositories;
 using SkinsSite.Services;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using ReflectionIT.Mvc.Paging;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,6 +20,17 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>()
 
 builder.Services.Configure<ConfigurationImagens>(builder.Configuration
     .GetSection("ConfigurationPastaImagens"));
+
+//builder.Services.Configure<IdentityOptions>(options =>
+//{
+//    //Default Password settings.
+//    options.Password.RequireDigit = true;
+//    options.Password.RequireLowercase = false;
+//    options.Password.RequireNonAlphanumeric = false;
+//    options.Password.RequireUppercase = false;
+//    options.Password.RequiredLength = 8;
+//    options.Password.RequiredUniqueChars = 0;
+//});
 
 builder.Services.AddTransient<ISkinRepository, SkinRepository>();
 builder.Services.AddTransient<ICategoriaRepository, CategoriaRepository>();
@@ -49,8 +60,14 @@ builder.Services.AddPaging(options =>
 });
 
 builder.Services.AddMemoryCache();
-builder.Services.AddSession();
+//builder.Services.AddDistributionMemoryCache();
 
+builder.Services.AddSession();
+//{
+//    options.IdleTimeout = TimeSpan.FromSeconds(10);
+//    options.Cookie.HttpOnly = true;
+//    options.Cookie.IsEssential = true;
+//});
 
 var app = builder.Build();
 
@@ -70,9 +87,9 @@ app.UseRouting();
 
 CriarPerfisUsuarios(app);
 
-////cria os perfis
+//cria os perfis
 //seedUserRoleInitial.SeedRoles();
-////cria os usuários e atribui ao perfil
+//cria os usuarios e atribui ao perfil
 //seedUserRoleInitial.SeedUsers();
 
 app.UseSession();
