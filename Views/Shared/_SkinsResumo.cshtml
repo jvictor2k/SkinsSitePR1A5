@@ -1,17 +1,15 @@
 ﻿@model Skin
 
 <div class="col-sm-4 col-md-4 col-lg-4">
-    <div class="container-imgproduto"><img src="@Model.ImagemUrl" class="img-fluid"></div>
+    @*<div class="container-imgproduto"><img src="@Model.ImagemUrl" class="img-fluid"></div>
 
-    <h3>Preço : @Model.Preco.ToString("c")</h3>
+    <h3>@Model.Preco.ToString("c")</h3>
 
     <h4>
     <a asp-controller="Skin" asp-action="Details"
-    asp-route-skinId="@Model.SkinId">@Model.Nome</a>
+    asp-route-skinId="@Model.SkinId">@Model.DescricaoCurta</a>
     </h4>
-
-    <p>@Model.DescricaoCurta</p>
-
+    <br />
     <div>
         <p class="button">
             <a class="btn btn-primary" id="cartButton" asp-controller="CarrinhoCompra"
@@ -19,5 +17,27 @@
         Incluir no Carrinho
         </a>
         </p>
+    </div>*@
+    <div class="card col-sm-4 col-md-4 col-lg-4 bg-dark" style="width: 402px;">
+        <div>
+            <a asp-controller="Skin" asp-action="Details"
+               asp-route-skinId="@Model.SkinId">
+               <div class="container-imgproduto"><img class="card-img-top" src="@Model.ImagemUrl"></div>
+           </a>
+        </div>
+        <div class="card-body">
+                <h3 class="card-title text-success font-weight-bold">@Model.Preco.ToString("c")</h3>
+            <h5 class="card-text">
+                <a class="text-white font-weight-bold" asp-controller="Skin" asp-action="Details"
+                   asp-route-skinId="@Model.SkinId" style="text-decoration: none;">@Model.DescricaoCurta</a>
+            </h5>
+            <br />
+            <a class="btn btn-info" asp-controller="CarrinhoCompra"
+               asp-action="AdicionarItemNoCarrinhoCompra" asp-route-SkinId="@Model.SkinId">
+               Incluir no Carrinho
+               <img src="~/images/shopping-cart.png" width="5%" height="5%" />
+           </a>
+        </div>
     </div>
+    <br />
 </div>

@@ -29,10 +29,7 @@ namespace SkinsSite.Models
         [Range(0,99999999999999, ErrorMessage ="O float deve estar entre 0.00000000000000 e 0.99999999999999")]
         public long SkinFloat { get; set; }
 
-        [Required(ErrorMessage = "A descrição da skin deve ser informada")]
         [Display(Name = "Descrição da skin")]
-        [MinLength(20, ErrorMessage = "A descrição deve ter no mínimo {1} caracteres")]
-        [MaxLength(200, ErrorMessage = "A descrição pode ter no máximo {1} caracteres")]
         public string DescricaoCurta { get; set; }
 
         [Required(ErrorMessage = "A descrição da skin deve ser informada")]

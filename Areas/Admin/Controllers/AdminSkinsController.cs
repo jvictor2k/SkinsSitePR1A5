@@ -75,11 +75,12 @@ namespace SkinsSite.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("SkinId,Tipo,Nome,Estado,SkinFloat,DescricaoCurta,DescricaoDetalhada,Preco,ImagemUrl,ImagemThumbnailUrl,IsSkinPreferida,EmEstoque,CategoriaId")] Skin skin)
+        public async Task<IActionResult> Create([Bind("SkinId,Tipo,Nome,Estado,SkinFloat,DescricaoDetalhada,Preco,ImagemUrl,ImagemThumbnailUrl,IsSkinPreferida,EmEstoque,CategoriaId")] Skin skin)
         {
             if (ModelState.IsValid)
             {
                 _context.Add(skin);
+                skin.DescricaoCurta = skin.Tipo + " " + skin.Nome + " (" + skin.Estado + ")";
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
@@ -109,7 +110,7 @@ namespace SkinsSite.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("SkinId,Tipo,Nome,Estado,SkinFloat,DescricaoCurta,DescricaoDetalhada,Preco,ImagemUrl,ImagemThumbnailUrl,IsSkinPreferida,EmEstoque,CategoriaId")] Skin skin)
+        public async Task<IActionResult> Edit(int id, [Bind("SkinId,Tipo,Nome,Estado,SkinFloat,DescricaoDetalhada,Preco,ImagemUrl,ImagemThumbnailUrl,IsSkinPreferida,EmEstoque,CategoriaId")] Skin skin)
         {
             if (id != skin.SkinId)
             {
@@ -121,6 +122,7 @@ namespace SkinsSite.Areas.Admin.Controllers
                 try
                 {
                     _context.Update(skin);
+                    skin.DescricaoCurta = skin.Tipo + " " + skin.Nome + " (" + skin.Estado + ")";
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)

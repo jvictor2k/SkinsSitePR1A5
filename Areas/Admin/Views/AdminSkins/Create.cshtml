@@ -24,18 +24,18 @@
             </div>
             <div class="form-group">
                 <label asp-for="Estado" class="control-label"></label>
-                <input asp-for="Estado" class="form-control" />
-                <span asp-validation-for="Estado" class="text-danger"></span>
+                <select asp-for="Estado" class="form-control">
+                    <option value="Battle-Scarred">Battle-Scarred</option>
+                    <option value="Well-Worn">Well-Worn</option>
+                    <option value="Field-Tested">Field-Tested</option>
+                    <option value="Minimal Wear">Minimal Wear</option>
+                    <option value="Factory New">Factory New</option>
+                </select>
             </div>
             <div class="form-group">
                 <label asp-for="SkinFloat" class="control-label"></label>
                 <input asp-for="SkinFloat" class="form-control" />
                 <span asp-validation-for="SkinFloat" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DescricaoCurta" class="control-label"></label>
-                <input asp-for="DescricaoCurta" class="form-control" />
-                <span asp-validation-for="DescricaoCurta" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="DescricaoDetalhada" class="control-label"></label>
