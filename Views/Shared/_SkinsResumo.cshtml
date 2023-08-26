@@ -1,6 +1,6 @@
 ﻿@model Skin
 
-<div class="col-sm-4 col-md-4 col-lg-4">
+<div class="card-produto">
     @*<div class="container-imgproduto"><img src="@Model.ImagemUrl" class="img-fluid"></div>
 
     <h3>@Model.Preco.ToString("c")</h3>
@@ -18,17 +18,19 @@
         </a>
         </p>
     </div>*@
-    <div class="card col-sm-4 col-md-4 col-lg-4 bg-dark" style="width: 402px;">
+    <div class="card bg-dark" style="width: 100%; max-height: 465px;">
         <div>
             <a asp-controller="Skin" asp-action="Details"
                asp-route-skinId="@Model.SkinId">
-               <div class="container-imgproduto"><img class="card-img-top" src="@Model.ImagemUrl"></div>
+               <div class="container-imgproduto">
+                    <img class="card-img-top" src="@Model.ImagemUrl">
+               </div>
            </a>
         </div>
         <div class="card-body">
-                <h3 class="card-title text-success font-weight-bold">@Model.Preco.ToString("c")</h3>
-            <h5 class="card-text">
-                <a class="text-white font-weight-bold" asp-controller="Skin" asp-action="Details"
+            <h3 class="card-title text-success font-weight-bold">@Model.Preco.ToString("c")</h3>
+            <h5 style="min-height: 70px;" class="card-text">
+                <a id="card-text" class="text-white font-weight-bold" asp-controller="Skin" asp-action="Details"
                    asp-route-skinId="@Model.SkinId" style="text-decoration: none;">@Model.DescricaoCurta</a>
             </h5>
             <br />
@@ -41,3 +43,4 @@
     </div>
     <br />
 </div>
+

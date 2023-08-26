@@ -15,9 +15,18 @@
 </div>
 <br />
 
-<div class="row">
+<div style="overflow: auto; gap: 8px;" class="d-flex w-100 flex-wrap container-items">
     @foreach (var skin in Model.SkinsPreferidas)
     {
         <partial name="_SkinsResumo" for="@skin" />
     }
 </div>
+
+<script>
+    let produtosElements = document.querySelectorAll("#card-text");
+    Array.from(produtosElements).forEach((item) => {
+        if (item.innerHTML.length > 30) {
+            item.textContent = item.textContent.substring(0, 30) + "...";
+        }
+    })
+</script>

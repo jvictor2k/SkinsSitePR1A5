@@ -2,17 +2,41 @@ html {
   font-size: 14px;
 }
 
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+.card-produto {
+    width: 30%;
 }
+
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 768px) {
+    .container-items {
+        flex-direction: column;
+        align-items: center;
+    }
+    .card-produto {
+        width: 75%;
+    }
+}
+
+@media (max-width: 425px) {
+    .container-produtos {
+        display: flex;
+        flex-direction: column;
+        gap: 25px;
+    }
+
+    .aside-skins, .main-content {
+        width: 100% !important;
+    }
+}
+
+
 
 html {
-  position: relative;
-  min-height: 100%;
-}
-
-body {
-  margin-bottom: 60px;
+    position: relative;
+    min-height: 100%;
 }
