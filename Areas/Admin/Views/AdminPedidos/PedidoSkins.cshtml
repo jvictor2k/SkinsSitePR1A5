@@ -22,7 +22,7 @@
                 <h3>@Html.DisplayFor(modelItem => item.Skin.Nome)</h3>
             </td>
             <td align="right">
-                <img src="@item.Skin.ImagemUrl" class="img-fluid" height="100" width="100">
+                <img src="~/images/produtos/@item.Skin.ImagemNome" class="img-fluid" height="100" width="100">
             </td>
             <td align="right">
                 <h3>@string.Format("{0:C}", item.Skin.Preco)</h3>

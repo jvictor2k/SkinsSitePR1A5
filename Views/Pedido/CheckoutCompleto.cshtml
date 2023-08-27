@@ -21,7 +21,7 @@
                     @foreach (var item in Model.PedidoItens)
                     {
                         <tr>
-                            <td><img src="@item.Skin.ImagemUrl" width="40" height="40" /></td>
+                            <td><img src="~/images/produtos/@item.Skin.ImagemNome" width="40" height="40" /></td>
                             <td>@item.Quantidade</td>
                             <td>@item.Skin.Nome</td>
                             <td>@item.Skin.Preco</td>

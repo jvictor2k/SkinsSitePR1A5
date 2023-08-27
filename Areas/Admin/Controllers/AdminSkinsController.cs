@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -18,10 +14,12 @@ namespace SkinsSite.Areas.Admin.Controllers
     public class AdminSkinsController : Controller
     {
         private readonly AppDbContext _context;
+        private readonly IWebHostEnvironment _hostingEnvironment;
 
-        public AdminSkinsController(AppDbContext context)
+        public AdminSkinsController(AppDbContext context, IWebHostEnvironment hostingEnvironment)
         {
             _context = context;
+            _hostingEnvironment = hostingEnvironment;
         }
 
         // GET: Admin/AdminSkins
@@ -75,10 +73,25 @@ namespace SkinsSite.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("SkinId,Tipo,Nome,Estado,SkinFloat,DescricaoDetalhada,Preco,ImagemUrl,ImagemThumbnailUrl,IsSkinPreferida,EmEstoque,CategoriaId")] Skin skin)
+        public async Task<IActionResult> Create([Bind("SkinId,Tipo,Nome,Estado,SkinFloat,DescricaoDetalhada,Preco,Imagem,ImagemNome,IsSkinPreferida,EmEstoque,CategoriaId")] Skin skin)
         {
             if (ModelState.IsValid)
             {
+                if (skin.Imagem != null && skin.Imagem.Length > 0)
+                {
+                    var imagePath = Path.Combine(_hostingEnvironment.WebRootPath, "images/produtos");
+                    var uniqueFileName = Guid.NewGuid().ToString() + "_" + skin.Imagem.FileName;
+                    var filePath = Path.Combine(imagePath, uniqueFileName);
+
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await skin.Imagem.CopyToAsync(fileStream);
+                    }
+
+                    // Salvar o nome do arquivo da imagem no banco de dados
+                    skin.ImagemNome = uniqueFileName;
+                }
+
                 _context.Add(skin);
                 skin.DescricaoCurta = skin.Tipo + " " + skin.Nome + " - " + skin.Estado;
                 await _context.SaveChangesAsync();
@@ -110,7 +123,7 @@ namespace SkinsSite.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("SkinId,Tipo,Nome,Estado,SkinFloat,DescricaoDetalhada,Preco,ImagemUrl,ImagemThumbnailUrl,IsSkinPreferida,EmEstoque,CategoriaId")] Skin skin)
+        public async Task<IActionResult> Edit(int id, [Bind("SkinId,Tipo,Nome,Estado,SkinFloat,DescricaoDetalhada,Preco,Imagem,ImagemNome,IsSkinPreferida,EmEstoque,CategoriaId")] Skin skin)
         {
             if (id != skin.SkinId)
             {
@@ -119,6 +132,21 @@ namespace SkinsSite.Areas.Admin.Controllers
 
             if (ModelState.IsValid)
             {
+                if (skin.Imagem != null && skin.Imagem.Length > 0)
+                {
+                    var imagePath = Path.Combine(_hostingEnvironment.WebRootPath, "images/produtos");
+                    var uniqueFileName = Guid.NewGuid().ToString() + "_" + skin.Imagem.FileName;
+                    var filePath = Path.Combine(imagePath, uniqueFileName);
+
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await skin.Imagem.CopyToAsync(fileStream);
+                    }
+
+                    // Salvar o nome do arquivo da imagem no banco de dados
+                    skin.ImagemNome = uniqueFileName;
+                }
+
                 try
                 {
                     _context.Update(skin);

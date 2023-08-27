@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Http;
 
 namespace SkinsSite.Models
 {
@@ -44,13 +45,10 @@ namespace SkinsSite.Models
         [Range(1, 9999.99, ErrorMessage = "O preço deve estar entre 1.00 e 10000.00")]
         public decimal Preco { get; set; }
 
-        [Display(Name = "Caminho Imagem Normal")]
-        [StringLength(200, ErrorMessage = "O {0} deve ter no máximo {1}")]
-        public string ImagemUrl { get; set; }
+        [NotMapped]
+        public IFormFile Imagem { get; set; }
 
-        [Display(Name = "Caminho Imagem Miniatura")]
-        [StringLength(200, ErrorMessage = "O {0} deve ter no máximo {1}")]
-        public string ImagemThumbnailUrl { get; set; }
+        public string ImagemNome { get; set; }
 
         [Display(Name = "Preferida?")]
         public bool IsSkinPreferida { get; set; }
