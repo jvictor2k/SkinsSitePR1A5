@@ -1,0 +1,42 @@
+﻿@model SkinsSite.Models.Cupom
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Skin</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.CupomCodigo)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.CupomCodigo)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ValorDesconto)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ValorDesconto)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Categoria)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Categoria.CategoriaNome)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Ativo)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Ativo)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.CupomId">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

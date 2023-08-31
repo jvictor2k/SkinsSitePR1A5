@@ -1,0 +1,54 @@
+﻿@model IEnumerable<SkinsSite.Models.Cupom>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Cupons</h1>
+
+<p>
+    <a asp-action="Create">Criar novo cupom</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.CupomCodigo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ValorDesconto)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Categoria)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Ativo)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CupomCodigo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ValorDesconto)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Categoria.CategoriaNome)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Ativo)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.CupomId">Editar</a> |
+                    <a asp-action="Details" asp-route-id="@item.CupomId">Detalhes</a> |
+                    <a asp-action="Delete" asp-route-id="@item.CupomId">Deletar</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

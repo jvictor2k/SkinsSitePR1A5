@@ -34,6 +34,7 @@ builder.Services.Configure<ConfigurationImagens>(builder.Configuration
 
 builder.Services.AddTransient<ISkinRepository, SkinRepository>();
 builder.Services.AddTransient<ICategoriaRepository, CategoriaRepository>();
+builder.Services.AddTransient<ICupomRepository, CupomRepository>();
 builder.Services.AddTransient<IPedidoRepository, PedidoRepository>();
 builder.Services.AddScoped<ISeedUserRoleInitial, SeedUserRoleInitial>();
 builder.Services.AddScoped<RelatorioVendasService>();
