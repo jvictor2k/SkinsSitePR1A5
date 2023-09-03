@@ -15,7 +15,7 @@
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark border-bottom box-shadow mb-3">
             <div class="container-fluid">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
-                    <img src="~/images/iconsite.png" height="15%" width="15%" alt="Logo" />
+                    <img src="~/images/LOGO.png" height="8%" width="8%" alt="Logo" class="rounded" />
                     SkinsSite
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
@@ -35,6 +35,12 @@
                         <li>
                             <a class="nav-link text-light" asp-area="" asp-controller="Contato" asp-action="Index">Contato</a>
                         </li>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-controller="Pedido" asp-action="HistoricoPedidos">Pedidos</a>
+                            </li>
+                        }
                         <li>
                             <form class="navbar-form navbar-right" asp-controller="Skin" asp-action="Search" method="get">
                                 <div class="form-group">

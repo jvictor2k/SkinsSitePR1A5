@@ -7,6 +7,8 @@ namespace SkinsSite.Models
     {
         public int PedidoId { get; set; }
 
+        public string UserId { get; set; }
+
         [Required(ErrorMessage = "Informe o nome")]
         [StringLength(50)]
         public string Nome { get; set; }

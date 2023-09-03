@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SkinsSite.Models;
 using SkinsSite.Repositories.Interfaces;
+using Microsoft.AspNetCore.Identity;
 
 namespace SkinsSite.Controllers
 {
@@ -9,12 +10,15 @@ namespace SkinsSite.Controllers
     {
         private readonly IPedidoRepository _pedidoRepository;
         private readonly CarrinhoCompra _carrinhoCompra;
+        private readonly UserManager<IdentityUser> _userManager;
 
         public PedidoController(IPedidoRepository pedidoRepository, 
-            CarrinhoCompra carrinhoCompra)
+               CarrinhoCompra carrinhoCompra,
+               UserManager<IdentityUser> userManager)
         {
             _pedidoRepository = pedidoRepository;
             _carrinhoCompra = carrinhoCompra;
+            _userManager = userManager;
         }
 
         [Authorize]
@@ -53,8 +57,11 @@ namespace SkinsSite.Controllers
             pedido.PedidoTotal = precoTotalPedido;
 
             //valida os dados do pedido
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
+                // Define o ID do usuário
+                pedido.UserId = _userManager.GetUserId(User);
+
                 //cria o pedido e os detalhes
                 _pedidoRepository.CriarPedido(pedido);
 
@@ -69,6 +76,15 @@ namespace SkinsSite.Controllers
                 return View("~/Views/Pedido/CheckoutCompleto.cshtml", pedido);
             }
             return View(pedido);
+        }
+
+        [Authorize]
+        public IActionResult HistoricoPedidos()
+        {
+            string userId = _userManager.GetUserId(User);
+            var pedidos = _pedidoRepository.GetPedidosByUserId(userId);
+
+            return View(pedidos);
         }
     }
 }

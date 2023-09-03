@@ -37,5 +37,13 @@ namespace SkinsSite.Repositories
             }
             _appDbContext.SaveChanges();
         }
+
+        public IEnumerable<Pedido> GetPedidosByUserId(string userId)
+        {
+            return _appDbContext.Pedidos
+                .Where(p => p.UserId == userId)
+                .OrderByDescending(p => p.PedidoEnviado)
+                .ToList();
+        }
     }
 }

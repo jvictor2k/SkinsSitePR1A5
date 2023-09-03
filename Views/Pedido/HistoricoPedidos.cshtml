@@ -1,0 +1,33 @@
+﻿@model IEnumerable<Pedido>
+
+<h2>Histórico de Pedidos</h2>
+
+@if (Model.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Número do Pedido</th>
+                <th>Data do Pedido</th>
+                <th>Total</th>
+                <th>Detalhes</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var pedido in Model)
+            {
+                <tr>
+                    <td>@pedido.PedidoId</td>
+                    <td>@pedido.PedidoEnviado.ToString("dd/MM/yyyy HH:mm")</td>
+                    <td>@pedido.PedidoTotal.ToString("C2")</td>
+                    <td><a class="btn btn-primary">Ver</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>Nenhum pedido encontrado.</p>
+}
+
