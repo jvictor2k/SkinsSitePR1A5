@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 using SkinsSite.Models;
 using SkinsSite.Repositories.Interfaces;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using SkinsSite.ViewModels;
+using SkinsSite.Context;
 
 namespace SkinsSite.Controllers
 {
@@ -11,14 +14,17 @@ namespace SkinsSite.Controllers
         private readonly IPedidoRepository _pedidoRepository;
         private readonly CarrinhoCompra _carrinhoCompra;
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly AppDbContext _context;
 
         public PedidoController(IPedidoRepository pedidoRepository, 
                CarrinhoCompra carrinhoCompra,
-               UserManager<IdentityUser> userManager)
+               UserManager<IdentityUser> userManager,
+               AppDbContext context)
         {
             _pedidoRepository = pedidoRepository;
             _carrinhoCompra = carrinhoCompra;
             _userManager = userManager;
+            _context = context;
         }
 
         [Authorize]
@@ -85,6 +91,28 @@ namespace SkinsSite.Controllers
             var pedidos = _pedidoRepository.GetPedidosByUserId(userId);
 
             return View(pedidos);
+        }
+
+        public IActionResult VerDetalhes(int? id)
+        {
+            var pedido = _context.Pedidos
+                         .Include(pd => pd.PedidoItens)
+                         .ThenInclude(s => s.Skin)
+                         .FirstOrDefault(p => p.PedidoId == id);
+
+            if (pedido == null)
+            {
+                Response.StatusCode = 404;
+                return View("PedidoNotFound", id.Value);
+            }
+
+            PedidoSkinViewModel pedidoSkins = new PedidoSkinViewModel()
+            {
+                Pedido = pedido,
+                PedidoDetalhes = pedido.PedidoItens
+            };
+
+            return View(pedidoSkins);
         }
     }
 }

@@ -1,0 +1,40 @@
+﻿@model SkinsSite.Models.Inventario
+@inject SkinsSite.Repositories.Interfaces.IInventarioRepository _inventarioRepository
+
+<h2>Inventário</h2>
+<br />
+
+@if (TempData.ContainsKey("MensagemSucesso"))
+{
+    <div class="alert alert-success" role="alert">
+        @TempData["MensagemSucesso"]
+    </div>
+}
+
+<form method="post" asp-action="EnviarSolicitacoes">
+<div class="grid-container">
+    @if (Model != null && Model.InventarioItems != null)
+    {
+            @foreach (var inventarioItem in Model.InventarioItems)
+            {
+                var skinDetails = _inventarioRepository.GetSkinDetails(inventarioItem.SkinId);
+
+                <div class="grid-item rounded-1">
+                    <img src="~/images/produtos/@skinDetails.ImagemNome" alt="@skinDetails.DescricaoCurta">
+                    <p>@skinDetails.DescricaoCurta</p>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="item-@inventarioItem.InventarioItemId" name="itensSelecionados" value="@inventarioItem.InventarioItemId">
+                        <label class="form-check-label" for="item-@inventarioItem.InventarioItemId">Solicitar envio</label>
+                    </div>
+                </div>
+            }
+            <div class="form-group">
+                <input type="submit" value="Enviar Solicitações" class="btn btn-primary" />
+            </div>
+    }
+    else
+    {
+        <p>Nenhum item de inventário disponível.</p>
+    }
+</div>
+</form>

@@ -14,6 +14,27 @@ html {
     line-height: 25px;
 }
 
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr); /* Cria 5 colunas igualmente espaçadas */
+    gap: 20px; /* Espaço entre os cards */
+}
+
+.grid-item {
+    border: 1px solid #ccc; /* Borda para separar os cards */
+    padding: 10px;
+    text-align: center;
+}
+
+    .grid-item img {
+        max-width: 100%; /* Garante que a imagem não ultrapasse o card */
+    }
+
+    .grid-item p {
+        margin-top: 10px;
+        font-size: 14px;
+    }
+
 @media (min-width: 768px) {
     html {
         font-size: 16px;

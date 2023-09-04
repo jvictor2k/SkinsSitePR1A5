@@ -62,6 +62,10 @@ namespace SkinsSite.Repositories
                         InventarioItems = new List<InventarioItem>()
                     };
                 }
+                else if (inventario.InventarioItems == null)
+                {
+                    inventario.InventarioItems = new List<InventarioItem>();
+                }
 
                 inventario.InventarioItems.Add(inventarioItem);
 
