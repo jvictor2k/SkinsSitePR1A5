@@ -18,5 +18,19 @@ namespace SkinsSite.Context
         public DbSet<Cupom> Cupons { get; set; }
         public DbSet<Pedido> Pedidos { get; set; }
         public DbSet<PedidoDetalhe> PedidoDetalhes { get; set; }
+        public DbSet<Inventario> Inventarios { get; set; }
+        public DbSet<InventarioItem> InventarioItens { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            //Config da tabela InventarioItem
+            modelBuilder.Entity<InventarioItem>()
+                .HasOne(ii => ii.Skin)
+                .WithMany()
+                .HasForeignKey(ii => ii.SkinId)
+                .OnDelete(DeleteBehavior.NoAction);
+        }
     }
 }

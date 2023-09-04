@@ -1,6 +1,7 @@
 ﻿using SkinsSite.Repositories.Interfaces;
 using SkinsSite.Models;
 using SkinsSite.Context;
+using Microsoft.AspNetCore.Identity;
 
 namespace SkinsSite.Repositories
 {
@@ -19,6 +20,10 @@ namespace SkinsSite.Repositories
         public void CriarPedido(Pedido pedido)
         {
             pedido.PedidoEnviado = DateTime.Now;
+            //Define o userId com base no usuário do pedido
+            string userId = pedido.UserId;
+
+            //Adiciona o pedido ao contexto
             _appDbContext.Pedidos.Add(pedido);
             _appDbContext.SaveChanges();
 
@@ -34,6 +39,37 @@ namespace SkinsSite.Repositories
                     Preco = carrinhoItem.Skin.Preco
                 };
                 _appDbContext.PedidoDetalhes.Add(pedidoDetail);
+                _appDbContext.SaveChanges();
+                var pedidoDetailId = pedidoDetail.PedidoDetalheId;
+
+                var inventarioItem = new InventarioItem()
+                {
+                    Quantidade = carrinhoItem.Quantidade,
+                    SkinId = carrinhoItem.Skin.SkinId,
+                    Preco = carrinhoItem.Skin.Preco,
+                    PedidoDetalheId = pedidoDetailId
+                };
+
+                //Encontra ou cria um inventário para o usuário com base no userId
+                var inventario = _appDbContext.Inventarios
+                    .FirstOrDefault(i => i.UserId == userId);
+
+                if (inventario == null)
+                {
+                    inventario = new Inventario()
+                    {
+                        UserId = userId, 
+                        InventarioItems = new List<InventarioItem>()
+                    };
+                }
+
+                inventario.InventarioItems.Add(inventarioItem);
+
+                //Atualize o total de itens no inventário
+                inventario.TotalItensInventario += inventarioItem.Quantidade;
+
+                //Atualize ou adicione o inventário ao contexto
+                _appDbContext.Inventarios.Update(inventario);
             }
             _appDbContext.SaveChanges();
         }
