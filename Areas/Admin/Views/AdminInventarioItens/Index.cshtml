@@ -1,0 +1,35 @@
+﻿@model List<InventarioItemDetalheViewModel>
+
+<h1>Todos os Itens em Inventários</h1>
+<br />
+
+@if (Model != null)
+{
+    <div class="grid-container">
+        @foreach (var item in Model)
+        {
+            <div class="grid-item rounded-1">
+                <img src="~/images/produtos/@item.Skin.ImagemNome" alt="@item.Skin.DescricaoCurta">
+                <p>@item.Skin.DescricaoCurta</p>
+                <p>@item.Skin.Tipo</p>
+                <p>@item.Skin.SkinFloat</p>
+                @if(item.InventarioItem.Solicitado == true)
+                {
+                    <div class="alert alert-success" role="alert">
+                        Solicitado
+                    </div>
+                }
+                else
+                {
+                    <div class="alert alert-light" role="alert">
+                        Não solicitado
+                    </div>
+                }
+            </div>
+        }
+    </div>
+}
+else
+{
+    <p>Nenhum item de inventário disponível.</p>
+}
