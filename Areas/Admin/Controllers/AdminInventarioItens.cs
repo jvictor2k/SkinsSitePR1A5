@@ -45,15 +45,27 @@ namespace SkinsSite.Areas.Admin.Controllers
         {
             var inventarioItens = _AppDbContext.InventarioItens
                                   .Include(ii => ii.Skin)
-                                  .Include(ii => ii.PedidoDetalhe)
                                   .ToList();
+
             var viewModelList = new List<InventarioItemDetalheViewModel>();
 
             foreach (var inventarioItem in inventarioItens)
             {
-                var viewModel = InventarioItemDetalhes(inventarioItem.InventarioItemId);
+                var pedidoDetalhe = _AppDbContext.PedidoDetalhes
+                             .Include(pd => pd.Pedido)
+                             .FirstOrDefault(pd => pd.PedidoDetalheId == inventarioItem.PedidoDetalheId);
+
+                var viewModel = new InventarioItemDetalheViewModel()
+                {
+                    InventarioItem = inventarioItem,
+                    Skin = inventarioItem.Skin,
+                    PedidoDetalhe = pedidoDetalhe,
+                    Pedido = pedidoDetalhe.Pedido
+                };
                 viewModelList.Add(viewModel);
             }
+
+            viewModelList = viewModelList.OrderByDescending(item => item.InventarioItem.Solicitado).ToList();
 
             return View(viewModelList);
         }

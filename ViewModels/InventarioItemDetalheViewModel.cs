@@ -7,5 +7,6 @@ namespace SkinsSite.ViewModels
         public Skin Skin { get; set; }
         public PedidoDetalhe PedidoDetalhe { get; set; }
         public InventarioItem InventarioItem { get; set; }
+        public Pedido Pedido { get; set; }
     }
 }

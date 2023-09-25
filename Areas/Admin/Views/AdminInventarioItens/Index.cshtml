@@ -10,13 +10,62 @@
         {
             <div class="grid-item rounded-1">
                 <img src="~/images/produtos/@item.Skin.ImagemNome" alt="@item.Skin.DescricaoCurta">
-                <p>@item.Skin.DescricaoCurta</p>
-                <p>@item.Skin.Tipo</p>
-                <p>@item.Skin.SkinFloat</p>
+                <n>@item.Skin.DescricaoCurta</n>
+                @if(item.Skin.Estado == "MW")
+                {
+                    <p>@(item.Skin.SkinFloat.ToString()[0] > '1' ? "Float: 0,0" + item.Skin.SkinFloat.ToString() : item.Skin.SkinFloat.ToString())</p>
+                }
+                else if(item.Skin.Estado == "FN")
+                {
+                    <p>@("Float: 0,0" + item.Skin.SkinFloat)</p>
+                }
+                else
+                {
+                    <p>@("Float: 0," + item.Skin.SkinFloat)</p>
+                }
+
                 @if(item.InventarioItem.Solicitado == true)
                 {
-                    <div class="alert alert-success" role="alert">
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modal_@item.InventarioItem.InventarioItemId">
                         Solicitado
+                    </button>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="modal_@item.InventarioItem.InventarioItemId" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Informações de Envio</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body text-start mx-3">
+                                    <n>@item.Skin.DescricaoCurta</n>
+                                    @if (item.Skin.Estado == "MW")
+                                    {
+                                        <p>@(item.Skin.SkinFloat.ToString()[0] > '1' ? "Float: 0,0" + item.Skin.SkinFloat.ToString() : item.Skin.SkinFloat.ToString())</p>
+                                    }
+                                    else if (item.Skin.Estado == "FN")
+                                    {
+                                        <p>@("Float: 0,0" + item.Skin.SkinFloat)</p>
+                                    }
+                                    else
+                                    {
+                                        <p>@("Float: 0," + item.Skin.SkinFloat)</p>
+                                    }
+                                    <p>@("Pedido: " + item.Pedido.PedidoId)</p>
+                                    <p>@("Cliente: " + item.Pedido.Nome + " " + item.Pedido.Sobrenome)</p>
+                                    <p>@("Telefone: " + item.Pedido.Telefone)</p>
+                                    <p>@("Email: " + item.Pedido.Email)</p>
+                                    <n>Trade Link da Steam:</n>
+                                    <p>@item.Pedido.TradeLink</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-primary">Save changes</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 }
                 else
