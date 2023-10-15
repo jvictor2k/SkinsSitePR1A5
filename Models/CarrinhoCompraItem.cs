@@ -12,5 +12,7 @@ namespace SkinsSite.Models
 
         [StringLength(200)]
         public string CarrinhoCompraId { get; set; }
+
+        public decimal? DescontoPreco { get; set; }
     }
 }

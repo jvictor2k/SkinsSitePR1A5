@@ -19,6 +19,7 @@ namespace SkinsSite.Models
 
         public string CarrinhoCompraId { get; set; }
         public List<CarrinhoCompraItem> CarrinhoCompraItems { get; set; }
+        public decimal DescontoTotal { get; set; }
 
         public static CarrinhoCompra GetCarrinho(IServiceProvider services)
         {
@@ -115,7 +116,7 @@ namespace SkinsSite.Models
         {
             var total = _context.CarrinhoCompraItens
                         .Where(c => c.CarrinhoCompraId == CarrinhoCompraId)
-                        .Select(c => c.Skin.Preco * c.Quantidade).Sum();
+                        .Select(c => (c.DescontoPreco ?? c.Skin.Preco) * c.Quantidade).Sum();
 
             return total;
         }

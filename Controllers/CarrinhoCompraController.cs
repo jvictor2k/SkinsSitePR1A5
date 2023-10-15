@@ -10,11 +10,13 @@ namespace SkinsSite.Controllers
     {
         private readonly ISkinRepository _skinRepository;
         private readonly CarrinhoCompra _carrinhoCompra;
+        private readonly ICupomRepository _cupomRepository;
 
-        public CarrinhoCompraController(ISkinRepository skinRepository, CarrinhoCompra carrinhoCompra)
+        public CarrinhoCompraController(ISkinRepository skinRepository, CarrinhoCompra carrinhoCompra, ICupomRepository cupomRepository)
         {
             _skinRepository = skinRepository;
             _carrinhoCompra = carrinhoCompra;
+            _cupomRepository = cupomRepository;
         }
 
         public IActionResult Index()
@@ -51,6 +53,45 @@ namespace SkinsSite.Controllers
                 _carrinhoCompra.RemoverDoCarrinho(skinSelecionado);
             }
             return RedirectToAction("Index");
+        }
+
+        [Authorize]
+        [HttpPost]
+        public IActionResult AplicarCupom(string cupomCodigo)
+        {
+            var cupom = _cupomRepository.ObterCupomPorCodigo(cupomCodigo);
+
+            if (cupom == null)
+            {
+                ModelState.AddModelError("", "Cupom inválido.");
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                var itensNoCarrinho = _carrinhoCompra.GetCarrinhoCompraItens();
+
+                decimal descontoTotal = 0;
+
+                foreach(var item in itensNoCarrinho)
+                {
+                    if (item.Skin.CategoriaId == cupom.CategoriaId)
+                    {
+                        decimal descontoItem = item.Skin.Preco * (cupom.ValorDesconto / 100);
+
+                        item.DescontoPreco = item.Skin.Preco - descontoItem;
+
+                        descontoTotal += descontoItem;
+                    }
+                    else
+                    {
+                        item.DescontoPreco = null;
+                    }
+                }
+
+                _carrinhoCompra.DescontoTotal = descontoTotal;
+
+                return RedirectToAction("Index");
+            }
         }
     }
 }

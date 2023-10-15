@@ -30,7 +30,14 @@
                         <td class="text-right">@item.Skin.Preco.ToString("c")</td>
 
                         <td>
-                            @((item.Quantidade * item.Skin.Preco).ToString("c"))
+                            @if (item.DescontoPreco.HasValue)
+                            {
+                                @($"{(item.Quantidade * item.DescontoPreco):c} (-{(item.Quantidade * item.Skin.Preco - (item.Quantidade * item.DescontoPreco)):c})")
+                            }
+                            else
+                            {
+                                @((item.Quantidade * item.Skin.Preco).ToString("c"))
+                            }
                         </td>
 
                         <td class="text-center">
@@ -51,6 +58,13 @@
 
     </table>
 
+    <div class="text-right">
+        <form asp-controller="CarrinhoCompra" asp-action="AplicarCupom" method="post">
+            <input type="text" name="cupomCodigo" placeholder="Código do cupom">
+            <button type="submit" class="btn btn-success">Aplicar Cupom</button>
+        </form>
+    </div>
+    <br />
 
     <div class="text-right">
         <div class="btn-group">
