@@ -32,11 +32,11 @@
                         <td>
                             @if (item.DescontoPreco.HasValue)
                             {
-                                @($"{(item.Quantidade * item.DescontoPreco):c} (-{(item.Quantidade * item.Skin.Preco - (item.Quantidade * item.DescontoPreco)):c})")
+                                @($"{item.DescontoPreco:c} (-{(item.Skin.Preco - item.DescontoPreco):c})")
                             }
                             else
                             {
-                                @((item.Quantidade * item.Skin.Preco).ToString("c"))
+                                @($"{(item.Quantidade * item.Skin.Preco):c}")
                             }
                         </td>
 

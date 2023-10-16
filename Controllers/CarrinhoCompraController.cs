@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using SkinsSite.Context;
 using SkinsSite.Models;
 using SkinsSite.Repositories.Interfaces;
 using SkinsSite.ViewModels;
@@ -11,12 +13,14 @@ namespace SkinsSite.Controllers
         private readonly ISkinRepository _skinRepository;
         private readonly CarrinhoCompra _carrinhoCompra;
         private readonly ICupomRepository _cupomRepository;
+        private readonly AppDbContext _context;
 
-        public CarrinhoCompraController(ISkinRepository skinRepository, CarrinhoCompra carrinhoCompra, ICupomRepository cupomRepository)
+        public CarrinhoCompraController(ISkinRepository skinRepository, CarrinhoCompra carrinhoCompra, ICupomRepository cupomRepository, AppDbContext context)
         {
             _skinRepository = skinRepository;
             _carrinhoCompra = carrinhoCompra;
             _cupomRepository = cupomRepository;
+            _context = context;
         }
 
         public IActionResult Index()
@@ -89,6 +93,8 @@ namespace SkinsSite.Controllers
                 }
 
                 _carrinhoCompra.DescontoTotal = descontoTotal;
+
+                _context.SaveChanges();
 
                 return RedirectToAction("Index");
             }
