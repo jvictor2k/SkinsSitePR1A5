@@ -31,12 +31,15 @@ namespace SkinsSite.Repositories
             
             foreach (var carrinhoItem in carrinhoCompraItens)
             {
+                decimal descontoItem = carrinhoItem.Skin.Preco - (carrinhoItem.DescontoPreco ?? carrinhoItem.Skin.Preco);
+
                 var pedidoDetail = new PedidoDetalhe()
                 {
                     Quantidade = carrinhoItem.Quantidade,
                     SkinId = carrinhoItem.Skin.SkinId,
                     PedidoId = pedido.PedidoId,
-                    Preco = carrinhoItem.Skin.Preco
+                    Preco = carrinhoItem.DescontoPreco ?? carrinhoItem.Skin.Preco,
+                    Desconto = descontoItem
                 };
                 _appDbContext.PedidoDetalhes.Add(pedidoDetail);
                 _appDbContext.SaveChanges();
@@ -46,7 +49,8 @@ namespace SkinsSite.Repositories
                 {
                     Quantidade = carrinhoItem.Quantidade,
                     SkinId = carrinhoItem.Skin.SkinId,
-                    Preco = carrinhoItem.Skin.Preco,
+                    Preco = carrinhoItem.DescontoPreco ?? carrinhoItem.Skin.Preco,
+                    Desconto = descontoItem,
                     PedidoDetalheId = pedidoDetailId
                 };
 

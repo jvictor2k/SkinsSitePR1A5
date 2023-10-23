@@ -65,38 +65,56 @@ namespace SkinsSite.Controllers
         {
             var cupom = _cupomRepository.ObterCupomPorCodigo(cupomCodigo);
 
-            if (cupom == null)
+            if (cupom == null || cupom.Ativo == false)
             {
                 ModelState.AddModelError("", "Cupom inválido.");
                 return RedirectToAction("Index");
             }
             else
             {
-                var itensNoCarrinho = _carrinhoCompra.GetCarrinhoCompraItens();
-
-                decimal descontoTotal = 0;
-
-                foreach(var item in itensNoCarrinho)
+                if (_carrinhoCompra.CategoriasCuponsAplicados.Contains(cupom.CategoriaId))
                 {
-                    if (item.Skin.CategoriaId == cupom.CategoriaId)
-                    {
-                        decimal descontoItem = item.Skin.Preco * (cupom.ValorDesconto / 100);
-
-                        item.DescontoPreco = item.Skin.Preco - descontoItem;
-
-                        descontoTotal += descontoItem;
-                    }
-                    else
-                    {
-                        item.DescontoPreco = null;
-                    }
+                    ModelState.AddModelError("", "Você já aplicou um cupom desta categoria no carrinho.");
+                    return RedirectToAction("Index");
                 }
+                else
+                {
+                    var itensNoCarrinho = _carrinhoCompra.GetCarrinhoCompraItens();
 
-                _carrinhoCompra.DescontoTotal = descontoTotal;
+                    decimal descontoTotal = _carrinhoCompra.DescontoTotal;
 
-                _context.SaveChanges();
+                    if (itensNoCarrinho == null)
+                    {
+                        ModelState.AddModelError("", "Não há itens no carrinho.");
+                        return RedirectToAction("Index");
+                    }
 
-                return RedirectToAction("Index");
+                    foreach (var item in itensNoCarrinho)
+                    {
+                        if (item.Skin.CategoriaId == cupom.CategoriaId)
+                        {
+                            decimal descontoItem = item.Skin.Preco * (cupom.ValorDesconto / 100);
+
+                            item.DescontoPreco = item.Skin.Preco - descontoItem;
+
+                            descontoTotal += descontoItem;
+                        }
+                        else
+                        {
+                            item.DescontoPreco = null;
+                        }
+                    }
+
+                    _carrinhoCompra.DescontoTotal = descontoTotal;
+
+                    _carrinhoCompra.CuponsAplicados.Add(cupomCodigo);
+
+                    _carrinhoCompra.CategoriasCuponsAplicados.Add(cupom.CategoriaId);
+
+                    _context.SaveChanges();
+
+                    return RedirectToAction("Index");
+                }
             }
         }
     }

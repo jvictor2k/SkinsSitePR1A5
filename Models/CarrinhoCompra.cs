@@ -20,6 +20,8 @@ namespace SkinsSite.Models
         public string CarrinhoCompraId { get; set; }
         public List<CarrinhoCompraItem> CarrinhoCompraItems { get; set; }
         public decimal DescontoTotal { get; set; }
+        public List<int> CategoriasCuponsAplicados { get; set; } = new List<int>();
+        public List<string> CuponsAplicados { get; set; } = new List<string>();
 
         public static CarrinhoCompra GetCarrinho(IServiceProvider services)
         {

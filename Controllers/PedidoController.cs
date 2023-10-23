@@ -40,13 +40,16 @@ namespace SkinsSite.Controllers
         {
             int totalItensPedido = 0;
             decimal precoTotalPedido = 0.0m;
+            decimal descontoTotal = 0.0m;
 
             //obtem os itens do carrinho de compra cliente
             List<CarrinhoCompraItem> items = _carrinhoCompra.GetCarrinhoCompraItens();
             _carrinhoCompra.CarrinhoCompraItems = items;
 
+            List<string> cuponsAplicados = _carrinhoCompra.CuponsAplicados;
+
             //verifica se existem itens de pedido
-            if(_carrinhoCompra.CarrinhoCompraItems.Count == 0)
+            if (_carrinhoCompra.CarrinhoCompraItems.Count == 0)
             {
                 ModelState.AddModelError("", "Seu carrinho está vazio, que tal incluir uma skin...");
             }
@@ -54,13 +57,23 @@ namespace SkinsSite.Controllers
             //calcula o total de itens e o total do pedido
             foreach(var item in items)
             {
+                decimal descontoItem = 0.0m;
+
+                if(item.DescontoPreco.HasValue)
+                {
+                    descontoItem = item.Skin.Preco - item.DescontoPreco.Value;
+                    descontoTotal += descontoItem;
+                }
+
                 totalItensPedido += item.Quantidade;
-                precoTotalPedido += (item.Skin.Preco * item.Quantidade);
+                precoTotalPedido += ((item.Skin.Preco - descontoItem) * item.Quantidade);
             }
 
             //atribui os valores obtidos ao pedido
             pedido.TotalItensPedido = totalItensPedido;
             pedido.PedidoTotal = precoTotalPedido;
+            pedido.DescontoTotal = descontoTotal;
+            pedido.CuponsAplicados = cuponsAplicados;
 
             //valida os dados do pedido
             if (ModelState.IsValid)

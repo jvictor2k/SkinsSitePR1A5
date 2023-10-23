@@ -39,6 +39,11 @@ namespace SkinsSite.Models
         public decimal PedidoTotal { get; set; }
 
         [ScaffoldColumn(false)]
+        [Column(TypeName = "decimal(18,2)")]
+        [Display(Name = "Desconto Total do Pedido")]
+        public decimal DescontoTotal { get; set; }
+
+        [ScaffoldColumn(false)]
         [Display(Name = "Itens no Pedido")]
         public int TotalItensPedido { get; set; }
 
@@ -53,5 +58,6 @@ namespace SkinsSite.Models
         public DateTime? PedidoEntregueEm { get; set; }
 
         public List<PedidoDetalhe> PedidoItens { get; set; }
+        public List<string> CuponsAplicados { get; set; } = new List<string>();
     }
 }
