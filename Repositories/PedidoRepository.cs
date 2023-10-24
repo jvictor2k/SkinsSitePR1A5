@@ -45,41 +45,44 @@ namespace SkinsSite.Repositories
                 _appDbContext.SaveChanges();
                 var pedidoDetailId = pedidoDetail.PedidoDetalheId;
 
-                var inventarioItem = new InventarioItem()
+                for (int i = 0; i < pedidoDetail.Quantidade; i++)
                 {
-                    Quantidade = carrinhoItem.Quantidade,
-                    SkinId = carrinhoItem.Skin.SkinId,
-                    Preco = carrinhoItem.DescontoPreco ?? carrinhoItem.Skin.Preco,
-                    Desconto = descontoItem,
-                    PedidoDetalheId = pedidoDetailId
-                };
+                    var inventarioItem = new InventarioItem()
+                    {
+                        SkinId = carrinhoItem.Skin.SkinId,
+                        Preco = carrinhoItem.DescontoPreco ?? carrinhoItem.Skin.Preco,
+                        Desconto = descontoItem,
+                        PedidoDetalheId = pedidoDetailId
+                    };
 
-                //Encontra ou cria um inventário para o usuário com base no userId
-                var inventario = _appDbContext.Inventarios
+                    //Encontra ou cria um inventário para o usuário com base no userId
+                    var inventario = _appDbContext.Inventarios
                     .FirstOrDefault(i => i.UserId == userId);
 
-                if (inventario == null)
-                {
-                    inventario = new Inventario()
+                    if (inventario == null)
                     {
-                        UserId = userId, 
-                        InventarioItems = new List<InventarioItem>()
-                    };
+                        inventario = new Inventario()
+                        {
+                            UserId = userId,
+                            InventarioItems = new List<InventarioItem>()
+                        };
+                    }
+                    else if (inventario.InventarioItems == null)
+                    {
+                        inventario.InventarioItems = new List<InventarioItem>();
+                    }
+
+                    inventario.InventarioItems.Add(inventarioItem);
+
+                    // Atualize o total de itens no inventário
+                    inventario.TotalItensInventario++;
+
+                    // Atualize ou adicione o inventário ao contexto
+                    _appDbContext.Inventarios.Update(inventario);
+
+                    _appDbContext.SaveChanges();
                 }
-                else if (inventario.InventarioItems == null)
-                {
-                    inventario.InventarioItems = new List<InventarioItem>();
-                }
-
-                inventario.InventarioItems.Add(inventarioItem);
-
-                //Atualize o total de itens no inventário
-                inventario.TotalItensInventario += inventarioItem.Quantidade;
-
-                //Atualize ou adicione o inventário ao contexto
-                _appDbContext.Inventarios.Update(inventario);
             }
-            _appDbContext.SaveChanges();
         }
 
         public IEnumerable<Pedido> GetPedidosByUserId(string userId)
