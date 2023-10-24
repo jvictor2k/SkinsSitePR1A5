@@ -14,5 +14,6 @@ namespace SkinsSite.Models
         public string CarrinhoCompraId { get; set; }
 
         public decimal? DescontoPreco { get; set; }
+        public string CupomUsado { get; set; }
     }
 }

@@ -97,11 +97,9 @@ namespace SkinsSite.Controllers
 
                             item.DescontoPreco = item.Skin.Preco - descontoItem;
 
+                            item.CupomUsado = cupomCodigo;
+
                             descontoTotal += descontoItem;
-                        }
-                        else
-                        {
-                            item.DescontoPreco = null;
                         }
                     }
 

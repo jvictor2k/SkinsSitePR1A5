@@ -46,7 +46,7 @@ namespace SkinsSite.Controllers
             List<CarrinhoCompraItem> items = _carrinhoCompra.GetCarrinhoCompraItens();
             _carrinhoCompra.CarrinhoCompraItems = items;
 
-            List<string> cuponsAplicados = _carrinhoCompra.CuponsAplicados;
+            List<string> cuponsAplicados = new List<string>();
 
             //verifica se existem itens de pedido
             if (_carrinhoCompra.CarrinhoCompraItems.Count == 0)
@@ -61,6 +61,11 @@ namespace SkinsSite.Controllers
 
                 if(item.DescontoPreco.HasValue)
                 {
+                    if (!cuponsAplicados.Contains(item.CupomUsado))
+                    {
+                        cuponsAplicados.Add(item.CupomUsado);
+                    }
+
                     descontoItem = item.Skin.Preco - item.DescontoPreco.Value;
                     descontoTotal += descontoItem;
                 }
@@ -73,7 +78,7 @@ namespace SkinsSite.Controllers
             pedido.TotalItensPedido = totalItensPedido;
             pedido.PedidoTotal = precoTotalPedido;
             pedido.DescontoTotal = descontoTotal;
-            pedido.CuponsAplicados = cuponsAplicados;
+            pedido.CuponsAplicados = string.Join(",", cuponsAplicados);
 
             //valida os dados do pedido
             if (ModelState.IsValid)

@@ -58,6 +58,6 @@ namespace SkinsSite.Models
         public DateTime? PedidoEntregueEm { get; set; }
 
         public List<PedidoDetalhe> PedidoItens { get; set; }
-        public List<string> CuponsAplicados { get; set; } = new List<string>();
+        public string CuponsAplicados { get; set; }
     }
 }
