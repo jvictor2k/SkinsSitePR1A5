@@ -38,8 +38,8 @@ namespace SkinsSite.Repositories
                     Quantidade = carrinhoItem.Quantidade,
                     SkinId = carrinhoItem.Skin.SkinId,
                     PedidoId = pedido.PedidoId,
-                    Preco = carrinhoItem.DescontoPreco ?? carrinhoItem.Skin.Preco,
-                    Desconto = descontoItem
+                    Preco = (carrinhoItem.DescontoPreco ?? carrinhoItem.Skin.Preco) * carrinhoItem.Quantidade,
+                    Desconto = descontoItem * carrinhoItem.Quantidade
                 };
                 _appDbContext.PedidoDetalhes.Add(pedidoDetail);
                 _appDbContext.SaveChanges();
