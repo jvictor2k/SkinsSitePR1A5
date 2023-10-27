@@ -35,8 +35,15 @@
             </div>
             <div class="form-group">
                 <label asp-for="SkinFloat" class="control-label"></label>
-                <input asp-for="SkinFloat" class="form-control" />
-                <span asp-validation-for="SkinFloat" class="text-danger"></span>
+                @if(!Model.Multiplas)
+                {
+                    <input asp-for="SkinFloat" class="form-control" />
+                    <span asp-validation-for="SkinFloat" class="text-danger"></span>
+                }
+                else
+                {
+                    <p>SkinFloat: Aleatório</p>
+                }
             </div>
             <div class="form-group">
                 <label asp-for="DescricaoDetalhada" class="control-label"></label>
@@ -59,9 +66,17 @@
                 </label>
             </div>
             <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="EmEstoque" /> @Html.DisplayNameFor(model => model.EmEstoque)
-                </label>
+                <label asp-for="EmEstoque" class="control-label"></label>
+                @if(Model.Multiplas)
+                {
+                    <input asp-for="EmEstoque" class="form-control" />
+                    <span asp-validation-for="EmEstoque" class="text-danger"></span>
+                }
+                else
+                {
+                    <input class="form-check" type="checkbox" @(Model.EmEstoque == 1 ? "checked" : "") />
+                    <span asp-validation-for="EmEstoque" class="text-danger"></span>
+                }
             </div>
             <div class="form-group">
                 <label asp-for="CategoriaId" class="control-label"></label>
@@ -78,4 +93,3 @@
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
-

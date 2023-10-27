@@ -54,8 +54,8 @@ namespace SkinsSite.Models
         public bool IsSkinPreferida { get; set; }
 
         [Display(Name = "Estoque")]
-        public bool EmEstoque { get; set; }
-
+        public int EmEstoque { get; set; }
+        public bool Multiplas { get; set; }
         public int CategoriaId { get; set; }
         public virtual Categoria Categoria { get; set; }
     }

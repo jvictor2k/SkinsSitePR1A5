@@ -73,10 +73,19 @@ namespace SkinsSite.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("SkinId,Tipo,Nome,Estado,SkinFloat,DescricaoDetalhada,Preco,Imagem,ImagemNome,IsSkinPreferida,EmEstoque,CategoriaId")] Skin skin)
+        public async Task<IActionResult> Create([Bind("SkinId,Tipo,Nome,Estado,SkinFloat,DescricaoDetalhada,Preco,Imagem,ImagemNome,IsSkinPreferida,EmEstoque,CategoriaId,Multiplas")] Skin skin)
         {
             if (ModelState.IsValid)
             {
+                if (skin.Multiplas)
+                {
+                    skin.SkinFloat = 0;
+                }
+                else
+                {
+                    skin.EmEstoque = 1;
+                }
+
                 if (skin.Imagem != null && skin.Imagem.Length > 0)
                 {
                     var imagePath = Path.Combine(_hostingEnvironment.WebRootPath, "images/produtos");
@@ -123,7 +132,7 @@ namespace SkinsSite.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("SkinId,Tipo,Nome,Estado,SkinFloat,DescricaoDetalhada,Preco,Imagem,ImagemNome,IsSkinPreferida,EmEstoque,CategoriaId")] Skin skin)
+        public async Task<IActionResult> Edit(int id, [Bind("SkinId,Tipo,Nome,Estado,SkinFloat,DescricaoDetalhada,Preco,Imagem,ImagemNome,IsSkinPreferida,EmEstoque,CategoriaId,Multiplas")] Skin skin)
         {
             if (id != skin.SkinId)
             {
