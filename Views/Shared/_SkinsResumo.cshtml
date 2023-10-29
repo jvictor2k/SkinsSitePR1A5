@@ -1,23 +1,6 @@
 ﻿@model Skin
 
 <div class="card-produto">
-    @*<div class="container-imgproduto"><img src="@Model.ImagemUrl" class="img-fluid"></div>
-
-    <h3>@Model.Preco.ToString("c")</h3>
-
-    <h4>
-    <a asp-controller="Skin" asp-action="Details"
-    asp-route-skinId="@Model.SkinId">@Model.DescricaoCurta</a>
-    </h4>
-    <br />
-    <div>
-        <p class="button">
-            <a class="btn btn-primary" id="cartButton" asp-controller="CarrinhoCompra"
-            asp-action="AdicionarItemNoCarrinhoCompra" asp-route-SkinId="@Model.SkinId">
-        Incluir no Carrinho
-        </a>
-        </p>
-    </div>*@
     <div class="card bg-dark" style="width: 100%; max-height: 465px;">
         <div>
             <a asp-controller="Skin" asp-action="Details"
@@ -43,4 +26,41 @@
     </div>
     <br />
 </div>
+
+@{
+    var erro = TempData["Erro"] as string;
+    if (!string.IsNullOrEmpty(erro))
+    {
+        <div class="modal fade" id="skinErrorModal" tabindex="-1" aria-labelledby="skinErrorModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="skinErrorModalLabel">
+                            Erro
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        @erro
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    var erro = '@erro';
+    if (erro !== '') {
+        $(document).ready(function () {
+            $('#skinErrorModal').modal('show');
+        });
+    }
+</script>
+
 

@@ -43,10 +43,21 @@ namespace SkinsSite.Controllers
             var skinSelecionado = _skinRepository.Skins.FirstOrDefault(p => p.SkinId == skinId);
             if (skinSelecionado != null)
             {
-                _carrinhoCompra.AdicionarAoCarrinho(skinSelecionado);
+                var adicaoComSucesso = _carrinhoCompra.AdicionarAoCarrinho(skinSelecionado);
+                if (adicaoComSucesso)
+                {
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    string urlReferencia = Request.Headers["Referer"].ToString();
+                    TempData["Erro"] = "Impossível adicionar mais deste item ao carrinho.";
+                    return Redirect(urlReferencia);
+                }
             }
             return RedirectToAction("Index");
         }
+
 
         [Authorize]
         public IActionResult RemoverItemDoCarrinhoCompra(int skinId)

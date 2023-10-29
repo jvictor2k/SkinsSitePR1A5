@@ -13,6 +13,7 @@
         <form asp-action="Edit" method="post" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="SkinId" />
+            <input type="hidden" asp-for="Multiplas" />
             <div class="form-group">
                 <label asp-for="Tipo" class="control-label"></label>
                 <input asp-for="Tipo" class="form-control" />
@@ -42,7 +43,7 @@
                 }
                 else
                 {
-                    <p>SkinFloat: Aleatório</p>
+                    <p>Aleatório</p>
                 }
             </div>
             <div class="form-group">
@@ -57,15 +58,24 @@
             </div>
             <div class="form-group">
                 <label asp-for="Imagem" class="control-label"></label>
-                <input asp-for="Imagem" type="file" class="form-control" />
-                <span asp-validation-for="Imagem" class="text-danger"></span>
+                @if (ViewData["ImagePath"] != null)
+                {
+                    <img src="~/images/produtos/@Model.ImagemNome" alt="@Model.DescricaoCurta" />
+                    <input asp-for="Imagem" type="file" class="form-control" />
+                    <span asp-validation-for="Imagem" class="text-danger"></span>
+                }
+                else
+                {
+                    <input asp-for="Imagem" type="file" class="form-control" />
+                    <span asp-validation-for="Imagem" class="text-danger"></span>
+                }
             </div>
             <div class="form-group form-check">
                 <label class="form-check-label">
                     <input class="form-check-input" asp-for="IsSkinPreferida" /> @Html.DisplayNameFor(model => model.IsSkinPreferida)
                 </label>
             </div>
-            <div class="form-group form-check">
+            <div class="form-group">
                 <label asp-for="EmEstoque" class="control-label"></label>
                 @if(Model.Multiplas)
                 {
@@ -74,7 +84,8 @@
                 }
                 else
                 {
-                    <input class="form-check" type="checkbox" @(Model.EmEstoque == 1 ? "checked" : "") />
+                    <input type="hidden" asp-for="EmEstoque" />
+                    <input class="form-check" type="checkbox" id="emEstoqueCheckbox" @(Model.EmEstoque == 1 ? "checked" : "") />
                     <span asp-validation-for="EmEstoque" class="text-danger"></span>
                 }
             </div>
@@ -93,3 +104,24 @@
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var emEstoqueCheckbox = document.getElementById('emEstoqueCheckbox');
+            var emEstoqueHidden = document.getElementById('EmEstoque');
+
+            if (emEstoqueCheckbox.checked) {
+                emEstoqueHidden.value = 1;
+            }
+
+            emEstoqueCheckbox.addEventListener('change', function () {
+                if (this.checked) {
+                    emEstoqueHidden.value = 1;
+                } else {
+                    emEstoqueHidden.value = 0;
+                }
+            });
+        });
+    </script>
+}

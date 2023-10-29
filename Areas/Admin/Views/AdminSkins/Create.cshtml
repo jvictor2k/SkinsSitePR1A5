@@ -12,6 +12,11 @@
     <div class="col-md-4">
         <form asp-action="Create" method="post" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="Multiplas" id="multiplasCheckbox" /> Multiplas
+                </label>
+            </div>
             <div class="form-group">
                 <label asp-for="Tipo" class="control-label"></label>
                 <input asp-for="Tipo" class="form-control" />
@@ -21,6 +26,10 @@
                 <label asp-for="Nome" class="control-label"></label>
                 <input asp-for="Nome" class="form-control" />
                 <span asp-validation-for="Nome" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CategoriaId" class="control-label"></label>
+                <select asp-for="CategoriaId" class="form-select" asp-items="ViewBag.CategoriaId"></select>
             </div>
             <div class="form-group">
                 <label asp-for="Estado" class="control-label"></label>
@@ -34,7 +43,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="SkinFloat" class="control-label"></label>
-                <input asp-for="SkinFloat" class="form-control" />
+                <input asp-for="SkinFloat" class="form-control" id="skinFloatInput" />
                 <span asp-validation-for="SkinFloat" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -47,25 +56,24 @@
                 <input asp-for="Preco" class="form-control" />
                 <span asp-validation-for="Preco" class="text-danger"></span>
             </div>
+            <br />
             <div class="form-group">
                 <label asp-for="Imagem" class="control-label"></label>
                 <input asp-for="Imagem" type="file" class="form-control" />
                 <span asp-validation-for="Imagem" class="text-danger"></span>
             </div>
+            <br />
             <div class="form-group form-check">
                 <label class="form-check-label">
                     <input class="form-check-input" asp-for="IsSkinPreferida" /> @Html.DisplayNameFor(model => model.IsSkinPreferida)
                 </label>
             </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="EmEstoque" /> @Html.DisplayNameFor(model => model.EmEstoque)
-                </label>
-            </div>
             <div class="form-group">
-                <label asp-for="CategoriaId" class="control-label"></label>
-                <select asp-for="CategoriaId" class ="form-control" asp-items="ViewBag.CategoriaId"></select>
+                <label asp-for="EmEstoque" class="control-label"></label>
+                <input asp-for="EmEstoque" class="form-control" id="emEstoqueInput" />
+                <span asp-validation-for="EmEstoque" class="text-danger"></span>
             </div>
+            <br />
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
@@ -76,3 +84,31 @@
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        let multiplasCheckbox = document.getElementById("multiplasCheckbox");
+        let skinFloatInput = document.getElementById("skinFloatInput");
+        let emEstoqueInput = document.getElementById("emEstoqueInput");
+
+        multiplasCheckbox.addEventListener("change", function () {
+            if (multiplasCheckbox.checked) {
+                skinFloatInput.disabled = true;
+                emEstoqueInput.disabled = false;
+            } else {
+                skinFloatInput.disabled = false;
+                emEstoqueInput.disabled = true;
+                emEstoqueInput.value = 1;
+            }
+        });
+
+        if (!multiplasCheckbox.checked) {
+            skinFloatInput.disabled = false;
+            emEstoqueInput.disabled = true;
+            emEstoqueInput.value = 1;
+        } else {
+            skinFloatInput.disabled = true;
+            emEstoqueInput.disabled = false;
+        }
+    });
+</script>

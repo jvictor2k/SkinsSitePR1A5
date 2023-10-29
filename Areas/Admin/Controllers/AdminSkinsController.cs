@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using System.Text;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -6,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using ReflectionIT.Mvc.Paging;
 using SkinsSite.Context;
 using SkinsSite.Models;
+using SkinsSite.Repositories.Interfaces;
 
 namespace SkinsSite.Areas.Admin.Controllers
 {
@@ -15,11 +17,13 @@ namespace SkinsSite.Areas.Admin.Controllers
     {
         private readonly AppDbContext _context;
         private readonly IWebHostEnvironment _hostingEnvironment;
+        private readonly ISkinRepository _skinRepository;
 
-        public AdminSkinsController(AppDbContext context, IWebHostEnvironment hostingEnvironment)
+        public AdminSkinsController(AppDbContext context, IWebHostEnvironment hostingEnvironment, ISkinRepository skinRepository)
         {
             _context = context;
             _hostingEnvironment = hostingEnvironment;
+            _skinRepository = skinRepository;
         }
 
         // GET: Admin/AdminSkins
@@ -73,7 +77,7 @@ namespace SkinsSite.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("SkinId,Tipo,Nome,Estado,SkinFloat,DescricaoDetalhada,Preco,Imagem,ImagemNome,IsSkinPreferida,EmEstoque,CategoriaId,Multiplas")] Skin skin)
+        public async Task<IActionResult> Create([Bind("SkinId,Multiplas,Tipo,Nome,Estado,SkinFloat,DescricaoDetalhada,Preco,Imagem,ImagemNome,IsSkinPreferida,EmEstoque,CategoriaId")] Skin skin)
         {
             if (ModelState.IsValid)
             {
@@ -123,13 +127,15 @@ namespace SkinsSite.Areas.Admin.Controllers
             {
                 return NotFound();
             }
+
+            string imagePath = Path.Combine(_hostingEnvironment.WebRootPath, "images/produtos", skin.ImagemNome);
+            ViewData["ImagePath"] = imagePath;
+
             ViewData["CategoriaId"] = new SelectList(_context.Categorias, "CategoriaId", "CategoriaNome", skin.CategoriaId);
             return View(skin);
         }
 
-        // POST: Admin/AdminSkins/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        //POST
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("SkinId,Tipo,Nome,Estado,SkinFloat,DescricaoDetalhada,Preco,Imagem,ImagemNome,IsSkinPreferida,EmEstoque,CategoriaId,Multiplas")] Skin skin)
@@ -141,6 +147,8 @@ namespace SkinsSite.Areas.Admin.Controllers
 
             if (ModelState.IsValid)
             {
+                string skinOldImgPath = _context.Skins.AsNoTracking().FirstOrDefault(s => s.SkinId == skin.SkinId).ImagemNome;
+
                 if (skin.Imagem != null && skin.Imagem.Length > 0)
                 {
                     var imagePath = Path.Combine(_hostingEnvironment.WebRootPath, "images/produtos");
@@ -154,6 +162,10 @@ namespace SkinsSite.Areas.Admin.Controllers
 
                     // Salvar o nome do arquivo da imagem no banco de dados
                     skin.ImagemNome = uniqueFileName;
+                }
+                else
+                {
+                    skin.ImagemNome = skinOldImgPath;
                 }
 
                 try
@@ -178,6 +190,7 @@ namespace SkinsSite.Areas.Admin.Controllers
             ViewData["CategoriaId"] = new SelectList(_context.Categorias, "CategoriaId", "CategoriaNome", skin.CategoriaId);
             return View(skin);
         }
+
 
         // GET: Admin/AdminSkins/Delete/5
         public async Task<IActionResult> Delete(int? id)

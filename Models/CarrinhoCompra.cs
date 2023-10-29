@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using SkinsSite.Repositories.Interfaces;
 
 namespace SkinsSite.Models
 {
@@ -42,31 +43,43 @@ namespace SkinsSite.Models
             return new CarrinhoCompra(context)
             {
                 CarrinhoCompraId = carrinhoId
-
             };
         }
 
-        public void AdicionarAoCarrinho(Skin skin)
+        public bool AdicionarAoCarrinho(Skin skin)
         {
-            var carrinhoCompraItem = _context.CarrinhoCompraItens.SingleOrDefault(
+            var skinFromDatabase = _context.Skins.FirstOrDefault(s => s.SkinId == skin.SkinId);
+
+            if (skinFromDatabase != null)
+            {
+                int limiteEstoque = skinFromDatabase.EmEstoque;
+
+                var carrinhoCompraItem = _context.CarrinhoCompraItens.SingleOrDefault(
                 s => s.Skin.SkinId == skin.SkinId &&
                 s.CarrinhoCompraId == CarrinhoCompraId);
 
-            if(carrinhoCompraItem == null)
-            {
-                carrinhoCompraItem = new CarrinhoCompraItem
+                if (carrinhoCompraItem == null && limiteEstoque > 0)
                 {
-                    CarrinhoCompraId = CarrinhoCompraId,
-                    Skin = skin,
-                    Quantidade = 1
-                };
-                _context.CarrinhoCompraItens.Add(carrinhoCompraItem);
+                    carrinhoCompraItem = new CarrinhoCompraItem
+                    {
+                        CarrinhoCompraId = CarrinhoCompraId,
+                        Skin = skin,
+                        Quantidade = 1
+                    };
+                    _context.CarrinhoCompraItens.Add(carrinhoCompraItem);
+                }
+                else if (carrinhoCompraItem != null && limiteEstoque > carrinhoCompraItem.Quantidade)
+                {
+                    carrinhoCompraItem.Quantidade++;
+                }
+                else
+                {
+                    return false;
+                }
+                _context.SaveChanges();
+                return true;
             }
-            else
-            {
-                carrinhoCompraItem.Quantidade++;
-            }
-            _context.SaveChanges();
+            return false;
         }
 
         public int RemoverDoCarrinho(Skin skin)
