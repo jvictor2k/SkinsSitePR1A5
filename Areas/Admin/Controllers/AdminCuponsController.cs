@@ -54,7 +54,7 @@ namespace SkinsSite.Areas.Admin.Controllers
         //POST: Admin/AdminCupons/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CupomId,CupomCodigo,ValorDesconto,Ativo,CategoriaId")] Cupom cupom)
+        public async Task<IActionResult> Create([Bind("CupomId,CupomCodigo,ValorDesconto,Ativo,CategoriaId,LimiteUso")] Cupom cupom)
         {
             if (ModelState.IsValid)
             {
@@ -88,7 +88,7 @@ namespace SkinsSite.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("CupomId,CupomCodigo,ValorDesconto,Ativo,CategoriaId")] Cupom cupom)
+        public async Task<IActionResult> Edit(int id, [Bind("CupomId,CupomCodigo,ValorDesconto,Ativo,CategoriaId,LimiteUso")] Cupom cupom)
         {
             if (id != cupom.CupomId)
             {

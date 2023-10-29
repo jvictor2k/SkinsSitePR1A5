@@ -32,6 +32,11 @@
                 </label>
             </div>
             <div class="form-group">
+                <label asp-for="LimiteUso" class="control-label"></label>
+                <input asp-for="LimiteUso" class="form-control" />
+                <span asp-validation-for="LimiteUso" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
         </form>

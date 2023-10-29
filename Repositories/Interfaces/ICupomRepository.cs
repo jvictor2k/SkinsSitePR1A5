@@ -6,5 +6,6 @@ namespace SkinsSite.Repositories.Interfaces
     {
         IEnumerable<Cupom> Cupons { get; }
         Cupom ObterCupomPorCodigo(string cupomCodigo);
+        bool VerificaLimiteCupom(Cupom cupom, string userId);
     }
 }

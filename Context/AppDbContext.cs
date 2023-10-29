@@ -16,6 +16,7 @@ namespace SkinsSite.Context
         public DbSet<Skin> Skins { get; set; }
         public DbSet<CarrinhoCompraItem> CarrinhoCompraItens { get; set; }
         public DbSet<Cupom> Cupons { get; set; }
+        public DbSet<UsoCupom> UsosCupons { get; set; }
         public DbSet<Pedido> Pedidos { get; set; }
         public DbSet<PedidoDetalhe> PedidoDetalhes { get; set; }
         public DbSet<Inventario> Inventarios { get; set; }

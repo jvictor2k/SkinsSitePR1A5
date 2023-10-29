@@ -75,3 +75,39 @@
     </div>
 </div>
 </div>
+
+@{
+    var erro = TempData["Erro"] as string;
+    if (!string.IsNullOrEmpty(erro))
+    {
+        <div class="modal fade" id="cupomErrorModal" tabindex="-1" aria-labelledby="cupomErrorModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="cupomErrorModalLabel">
+                            Erro
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        @erro
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    var erro = '@erro';
+    if (erro !== '') {
+        $(document).ready(function () {
+            $('#cupomErrorModal').modal('show');
+        });
+    }
+</script>

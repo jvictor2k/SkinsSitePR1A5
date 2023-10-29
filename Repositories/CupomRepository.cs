@@ -21,6 +21,12 @@ namespace SkinsSite.Repositories
                 .FirstOrDefault(c => c.CupomCodigo == cupomCodigo);
         }
 
+        public bool VerificaLimiteCupom(Cupom cupom, string userId)
+        {
+            return cupom.LimiteUso > _context.UsosCupons
+                  .Count(uso => uso.CupomId == cupom.CupomId && uso.UserId == userId);
+        }
+
         public IEnumerable<Cupom> Cupons => _context.Cupons;
     }
 }

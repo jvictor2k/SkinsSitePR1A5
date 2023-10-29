@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SkinsSite.Context;
@@ -13,14 +14,16 @@ namespace SkinsSite.Controllers
         private readonly ISkinRepository _skinRepository;
         private readonly CarrinhoCompra _carrinhoCompra;
         private readonly ICupomRepository _cupomRepository;
+        private readonly UserManager<IdentityUser> _userManager;
         private readonly AppDbContext _context;
 
-        public CarrinhoCompraController(ISkinRepository skinRepository, CarrinhoCompra carrinhoCompra, ICupomRepository cupomRepository, AppDbContext context)
+        public CarrinhoCompraController(ISkinRepository skinRepository, CarrinhoCompra carrinhoCompra, ICupomRepository cupomRepository, AppDbContext context, UserManager<IdentityUser> userManager)
         {
             _skinRepository = skinRepository;
             _carrinhoCompra = carrinhoCompra;
             _cupomRepository = cupomRepository;
             _context = context;
+            _userManager = userManager;
         }
 
         public IActionResult Index()
@@ -83,6 +86,15 @@ namespace SkinsSite.Controllers
             }
             else
             {
+                string userId = _userManager.GetUserId(User);
+
+                if (!_cupomRepository.VerificaLimiteCupom(cupom, userId))
+                {
+                    string urlReferencia = Request.Headers["Referer"].ToString();
+                    TempData["Erro"] = "Impossível utilizar o cupom informado, você atingiu o limite de usos.";
+                    return Redirect(urlReferencia);
+                }
+
                 if (_carrinhoCompra.CategoriasCuponsAplicados.Contains(cupom.CategoriaId))
                 {
                     ModelState.AddModelError("", "Você já aplicou um cupom desta categoria no carrinho.");

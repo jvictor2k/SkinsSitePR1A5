@@ -15,16 +15,19 @@ namespace SkinsSite.Controllers
         private readonly CarrinhoCompra _carrinhoCompra;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly AppDbContext _context;
+        private readonly ICupomRepository _cupomRepository;
 
         public PedidoController(IPedidoRepository pedidoRepository, 
                CarrinhoCompra carrinhoCompra,
                UserManager<IdentityUser> userManager,
-               AppDbContext context)
+               AppDbContext context,
+               ICupomRepository cupomRepository)
         {
             _pedidoRepository = pedidoRepository;
             _carrinhoCompra = carrinhoCompra;
             _userManager = userManager;
             _context = context;
+            _cupomRepository = cupomRepository;
         }
 
         [Authorize]
@@ -64,6 +67,17 @@ namespace SkinsSite.Controllers
                     if (!cuponsAplicados.Contains(item.CupomUsado))
                     {
                         cuponsAplicados.Add(item.CupomUsado);
+
+                        var cupom = _cupomRepository.ObterCupomPorCodigo(item.CupomUsado);
+
+                        var usoCupom = new UsoCupom
+                        {
+                            CupomId = cupom.CupomId,
+                            UserId = _userManager.GetUserId(User)
+                        };
+
+                        _context.UsosCupons.Add(usoCupom);
+                        _context.SaveChanges();
                     }
 
                     descontoItem = item.Skin.Preco - item.DescontoPreco.Value;

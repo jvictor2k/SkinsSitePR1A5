@@ -21,6 +21,8 @@ namespace SkinsSite.Models
 
         [Display(Name = "Ativo?")]
         public bool Ativo { get; set; }
+        [Display(Name = "Limite de uso")]
+        public int LimiteUso { get; set; }
 
         public int CategoriaId { get; set; }
         public virtual Categoria Categoria { get; set; }
