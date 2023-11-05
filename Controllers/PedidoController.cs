@@ -6,6 +6,10 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SkinsSite.ViewModels;
 using SkinsSite.Context;
+using MercadoPago.Config;
+using Microsoft.AspNetCore.Http.Features;
+using MercadoPago.Client.Preference;
+using MercadoPago.Resource.Preference;
 
 namespace SkinsSite.Controllers
 {
@@ -39,8 +43,9 @@ namespace SkinsSite.Controllers
 
         [Authorize]
         [HttpPost]
-        public IActionResult Checkout(Pedido pedido)
+        public async Task<IActionResult> Checkout(Pedido pedido)
         {
+
             int totalItensPedido = 0;
             decimal precoTotalPedido = 0.0m;
             decimal descontoTotal = 0.0m;
@@ -94,6 +99,8 @@ namespace SkinsSite.Controllers
             pedido.DescontoTotal = descontoTotal;
             pedido.CuponsAplicados = string.Join(",", cuponsAplicados);
 
+
+
             //valida os dados do pedido
             if (ModelState.IsValid)
             {
@@ -110,10 +117,46 @@ namespace SkinsSite.Controllers
                 //limpa o carrinho do cliente
                 _carrinhoCompra.LimparCarrinho();
 
+                var response = await MercadoPagoCheckout(pedido);
+                if (response != null)
+                {
+                    ViewBag.ResponseId = response.Id;
+                }
+                else
+                {
+                    ViewBag.ResponseId = 0;
+                }
+
                 //exibe a view com dados do cliente e pedido
                 return View("~/Views/Pedido/CheckoutCompleto.cshtml", pedido);
             }
+
+
             return View(pedido);
+        }
+
+        public async Task<Preference> MercadoPagoCheckout(Pedido pedido)
+        {
+            MercadoPagoConfig.AccessToken = "TEST-5933096959985730-110215-ea3fc3965620f675592d7c7da87756e8-1185600433";
+
+            var request = new PreferenceRequest
+            {
+                Items = new List<PreferenceItemRequest>
+                {
+                    new PreferenceItemRequest
+                    {
+                        Title = "Skins",
+                        Quantity = 1,
+                        CurrencyId = "BRL",
+                        UnitPrice = pedido.PedidoTotal,
+                    },
+                },
+            };
+
+            var client = new PreferenceClient();
+            Preference preference = await client.CreateAsync(request);
+
+            return preference;
         }
 
         [Authorize]
