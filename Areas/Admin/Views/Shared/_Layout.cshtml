@@ -21,7 +21,17 @@
                     <a class="nav-link text-light" asp-area="Admin" asp-controller="AdminCupons" asp-action="Index">Cupons</a>
                     <a class="nav-link text-light" asp-area="Admin" asp-controller="AdminPedidos" asp-action="Index">Pedidos</a>
                     <a class="nav-link text-light" asp-area="Admin" asp-controller="AdminInventarioItens" asp-action="Index">Itens em Inventários</a>
-                    <a class="nav-link text-light" asp-area="Admin" asp-controller="AdminRelatorioVendas" asp-action="Index">Relatório de Vendas</a>
+                    @*<a class="nav-link text-light" asp-area="Admin" asp-controller="AdminRelatorioVendas" asp-action="Index">Relatório de Vendas</a>*@
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                            Relatórios
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                            <a class="dropdown-item" asp-area="Admin" asp-controller="AdminRelatorioVendas" asp-action="Index">Vendas Simples</a>
+                            <a class="dropdown-item" asp-area="Admin" asp-controller="AdminRelatorioVendas" asp-action="IndexComCupons">Vendas com Cupons</a>
+                            <a class="dropdown-item" asp-area="Admin" asp-controller="AdminRelatorioVendas" asp-action="IndexSkinsMaisVendidas">Skins mais vendidas</a>
+                        </div>
+                    </div>
                     <!--Graficos-->
                     <div class="dropdown">
                         <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
