@@ -40,13 +40,18 @@ namespace SkinsSite.Controllers
             return View(carrinhoCompraVM);
         }
 
-        [Authorize]
-        public IActionResult AdicionarItemNoCarrinhoCompra(int skinId)
+        public IActionResult AdicionarItemNoCarrinhoCompra(int skinId, int quantidade)
         {
+            if (!User.Identity.IsAuthenticated)
+            {
+                // Se não estiver autenticado, redireciona para a tela de login
+                return RedirectToAction("Login", "Account", new { returnUrl = Url.Action("AdicionarItemNoCarrinhoCompra", "CarrinhoCompra", new { skinId, quantidade }) });
+            }
+
             var skinSelecionado = _skinRepository.Skins.FirstOrDefault(p => p.SkinId == skinId);
             if (skinSelecionado != null)
             {
-                var adicaoComSucesso = _carrinhoCompra.AdicionarAoCarrinho(skinSelecionado);
+                var adicaoComSucesso = _carrinhoCompra.AdicionarAoCarrinho(skinSelecionado, quantidade);
                 if (adicaoComSucesso)
                 {
                     return RedirectToAction("Index");

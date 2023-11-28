@@ -1,40 +1,225 @@
-﻿@model Skin
-<div class="container">
-<div class="row">
-    @*<div class="text-center">
-        <img src="@Model.ImagemUrl" class="img-fluid" alt="">
-    </div>
-    <div class="card-block">
-        <h2 class="card-title">@Model.Nome</h2>
-        <p class="card-text"><h5>@Model.DescricaoDetalhada</h5></p>
-        <p class="btn btn-group align-content-lg-end">
-              <a asp-controller="Skin" asp-action="List"
-                 class="btn btn-outline-info">Ver todas as Skins</a>
-              <a class="btn btn-primary" id="cardButton" asp-controller="CarrinhoCompra"
-              asp-action="AdicionarItemNoCarrinhoCompra" asp-route-skinId="@Model.SkinId">
-              Adicionar @Model.Nome ao carrinho
-              </a>
-        </p>
-    </div>*@
-    <div class="container text-center">
-        <div class="row">
-            <div class="col">
-                <div class="col-md-6">
-                    <img src="~/images/produtos/@Model.ImagemNome" class="img-fluid" alt="">
+﻿@model DetailsViewModel
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <div class="card h-100 shadow">
+                <div class="card-body p-4">
+                    <div class="row">
+                        <!-- Imagem do Produto -->
+                        <div class="col-md-6">
+                            <div class="rect-img-container">
+                                <img src="~/images/produtos/@Model.SelectedSkin.ImagemNome"
+                                     alt="@Model.SelectedSkin.DescricaoCurta" class="rect-img" data-bs-toggle="modal" data-bs-target="#imagemModal">
+                            </div>
+                        </div>
+
+                        <div class="modal fade" id="imagemModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-xl">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">@Model.SelectedSkin.DescricaoCurta</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                                    </div>
+                                    <div class="modal-body text-center">
+                                        <img src="~/images/produtos/@Model.SelectedSkin.ImagemNome" alt="Produto" class="img-fluid" style="max-width: 100%; max-height: 80vh; margin: auto;">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <br>
+                            <h2>@Model.SelectedSkin.DescricaoCurta</h2>
+                            <hr class="my-4">
+                            <p>
+                                @Model.SelectedSkin.DescricaoDetalhada
+                            </p>
+                        </div>
+
+                    </div>
                 </div>
             </div>
-            <div class="col">
-                    <div class="card" style="width: 18rem;">
-                        <div class="card-body">
-                            <h5 class="card-title">Card title</h5>
-                            <h6 class="card-subtitle mb-2 text-body-secondary">Card subtitle</h6>
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                            <a href="#" class="card-link">Card link</a>
-                            <a href="#" class="card-link">Another link</a>
+        </div>
+        <br>
+        <div class="col-md-4 mx-auto">
+            <div class="card h-100 shadow">
+                <br>
+                <div class="card-body p-4">
+                    <div class="row">
+                        <p class="text-success fs-3"><strong>R$ @Model.SelectedSkin.Preco</strong></p>
+                        <hr>
+                        @using (Html.BeginForm("AdicionarItemNoCarrinhoCompra", "CarrinhoCompra", new { skinId = Model.SelectedSkin.SkinId }, FormMethod.Post))
+                        {
+                            <div class="mb-3">
+                                <label for="quantidade" class="form-label">Quantidade:</label>
+                                <div class="input-group">
+                                    <button type="button" class="btn btn-danger" onclick="decrementarQuantidade()">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-dash-circle-fill" viewBox="0 0 16 16">
+                                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M4.5 7.5a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1z" />
+                                        </svg>
+                                    </button>
+                                    <input type="number" id="quantidade" name="quantidade" class="form-control text-center"
+                                           value="1" min="1" max="@Model.SelectedSkin.EmEstoque">
+                                    <button type="button" class="btn btn-success" onclick="incrementarQuantidade()">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
+                                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z" />
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                            <button class="btn btn-info" type="submit">
+                                Incluir no Carrinho
+                                <img src="~/images/shopping-cart.png" width="5%" height="5%" />
+                            </button>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="container px-4 text-left bg-dark rounded">
+                <div class="row gx-5">
+                    <div class="col">
+                        <div class="p-3">
+                            <h2 class="text-white">
+                                Talvez você também goste
+                            </h2>
                         </div>
                     </div>
+                </div>
+            </div>
+            <br>
+            <div style="overflow: auto; gap: 8px;" class="d-flex w-100 flex-wrap container-items">
+                @foreach (var skin in Model.AdditionalSkins)
+                {
+                    <partial name="_SkinsResumo" for="@skin" />
+                }
+            </div>
+            <div class="container px-4 text-left bg-dark rounded">
+                <div class="row gx-5">
+                    <div class="col">
+                        <div class="p-3">
+                            <h2 class="text-white">
+                                Especificações
+                            </h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="card shadow">
+                <div class="card-body p-4">
+                    <div class="row">
+                        <table class="table table-striped">
+                            <tr>
+                                <td>
+                                    Descrição curta
+                                </td>
+                                <td>
+                                    @Model.SelectedSkin.DescricaoCurta
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Código
+                                </td>
+                                <td>
+                                    @Model.SelectedSkin.SkinId
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Tipo
+                                </td>
+                                <td>
+                                    @Model.SelectedSkin.Tipo
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Nome da skin
+                                </td>
+                                <td>
+                                    @Model.SelectedSkin.Nome
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Estado
+                                </td>
+                                <td>
+                                    @{
+                                        string estadoCompleto = string.Empty;
+
+                                        switch (Model.SelectedSkin.Estado)
+                                        {
+                                            case "BS":
+                                                estadoCompleto = "Battle-Scarred";
+                                                break;
+                                            case "WW":
+                                                estadoCompleto = "Well-Worn";
+                                                break;
+                                            case "FT":
+                                                estadoCompleto = "Field-Tested";
+                                                break;
+                                            case "MW":
+                                                estadoCompleto = "Minimal Wear";
+                                                break;
+                                            case "FN":
+                                                estadoCompleto = "Factory New";
+                                                break;
+                                            default:
+                                                estadoCompleto = "-";
+                                                break;
+                                        }
+
+                                        string floatFormatado = Model.SelectedSkin.SkinFloat.ToString();
+
+                                        if (Model.SelectedSkin.Estado == "FN")
+                                        {
+                                            floatFormatado = "0,0" + Model.SelectedSkin.SkinFloat;
+                                        }
+                                        else if (Model.SelectedSkin.Estado == "MW" && floatFormatado[0] != '1')
+                                        {
+                                            floatFormatado = "0,0" + Model.SelectedSkin.SkinFloat;
+                                        }
+                                        else
+                                        {
+                                            floatFormatado = "0," + Model.SelectedSkin.SkinFloat;
+                                        }
+
+                                        string exibicaoFinal = Model.SelectedSkin.Multiplas ? "Aleatório" : floatFormatado;
+                                    }
+                                    @estadoCompleto
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Float
+                                </td>
+                                <td>
+                                    @exibicaoFinal
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
-</div>
+
+<script>
+    function incrementarQuantidade() {
+        var quantidadeInput = document.getElementById('quantidade');
+        quantidadeInput.stepUp();
+    }
+
+    function decrementarQuantidade() {
+        var quantidadeInput = document.getElementById('quantidade');
+        quantidadeInput.stepDown();
+    }
+</script>
+

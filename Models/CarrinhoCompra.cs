@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using SkinsSite.Repositories.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 
 namespace SkinsSite.Models
 {
@@ -46,7 +47,7 @@ namespace SkinsSite.Models
             };
         }
 
-        public bool AdicionarAoCarrinho(Skin skin)
+        public bool AdicionarAoCarrinho(Skin skin, int quantidade)
         {
             var skinFromDatabase = _context.Skins.FirstOrDefault(s => s.SkinId == skin.SkinId);
 
@@ -58,19 +59,19 @@ namespace SkinsSite.Models
                 s => s.Skin.SkinId == skin.SkinId &&
                 s.CarrinhoCompraId == CarrinhoCompraId);
 
-                if (carrinhoCompraItem == null && limiteEstoque > 0)
+                if (carrinhoCompraItem == null && limiteEstoque > 0 && limiteEstoque >= quantidade)
                 {
                     carrinhoCompraItem = new CarrinhoCompraItem
                     {
                         CarrinhoCompraId = CarrinhoCompraId,
                         Skin = skin,
-                        Quantidade = 1
+                        Quantidade = quantidade
                     };
                     _context.CarrinhoCompraItens.Add(carrinhoCompraItem);
                 }
-                else if (carrinhoCompraItem != null && limiteEstoque > carrinhoCompraItem.Quantidade)
+                else if (carrinhoCompraItem != null && limiteEstoque > carrinhoCompraItem.Quantidade && limiteEstoque >= carrinhoCompraItem.Quantidade + quantidade)
                 {
-                    carrinhoCompraItem.Quantidade++;
+                    carrinhoCompraItem.Quantidade = carrinhoCompraItem.Quantidade + quantidade;
                 }
                 else
                 {

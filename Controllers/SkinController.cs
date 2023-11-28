@@ -19,7 +19,7 @@ namespace SkinsSite.Controllers
             IEnumerable<Skin> skins;
             string categoriaAtual = string.Empty;
 
-            if(string.IsNullOrEmpty(categoria))
+            if (string.IsNullOrEmpty(categoria))
             {
                 skins = _skinRepository.Skins.OrderBy(s => s.SkinId);
                 categoriaAtual = "Todas as skins";
@@ -44,8 +44,22 @@ namespace SkinsSite.Controllers
 
         public IActionResult Details(int skinId)
         {
-            var skin = _skinRepository.Skins.FirstOrDefault(s => s.SkinId == skinId);
-            return View(skin);
+            var additionalSkins = _skinRepository.Skins
+                .Where(s => s.SkinId != skinId)
+                .OrderBy(x => Guid.NewGuid())
+                .Take(3) // Define o limite para 3 skins adicionais
+                .ToList();
+
+            var detailsViewModel = new DetailsViewModel
+            {
+                SelectedSkin = _skinRepository.Skins.FirstOrDefault(s => s.SkinId == skinId),
+                AdditionalSkins = additionalSkins
+            };
+
+            return View(detailsViewModel);
+
+            //var skin = _skinRepository.Skins.FirstOrDefault(s => s.SkinId == skinId);
+            //return View(skin);
         }
 
         public ViewResult Search(string searchString)
@@ -61,7 +75,7 @@ namespace SkinsSite.Controllers
             else
             {
                 skins = _skinRepository.Skins
-                        .Where(p => p.Nome.ToLower().Contains(searchString.ToLower()));
+                        .Where(p => p.DescricaoCurta.ToLower().Contains(searchString.ToLower()));
 
                 if (skins.Any())
                 {

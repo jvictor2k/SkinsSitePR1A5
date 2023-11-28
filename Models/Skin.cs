@@ -42,7 +42,6 @@ namespace SkinsSite.Models
         [Required(ErrorMessage = "O preço da skin deve ser informado")]
         [Display(Name = "Preço")]
         [Column(TypeName = "decimal(10,2)")]
-        [Range(1, 9999.99, ErrorMessage = "O preço deve estar entre 1.00 e 10000.00")]
         public decimal Preco { get; set; }
 
         [NotMapped]
