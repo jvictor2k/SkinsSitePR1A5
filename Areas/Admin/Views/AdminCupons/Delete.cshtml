@@ -1,12 +1,12 @@
 ﻿@model SkinsSite.Models.Cupom
 
 @{
-    ViewData["Title"] = "Delete";
+    ViewData["Title"] = "Deletar";
 }
 
-<h1>Delete</h1>
+<h1>Deletar</h1>
 
-<h3>Are you sure you want to delete this?</h3>
+<h3 class="py-2">Tem certeza que deseja deletar esse cupom?</h3>
 <div>
     <h4>Skin</h4>
     <hr />
@@ -45,7 +45,7 @@
 
     <form asp-action="Delete">
         <input type="hidden" asp-for="CupomId" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
+        <input type="submit" value="Deletar" class="btn btn-danger" />
+        <a class="btn btn-primary" asp-action="Index">Retornar</a>
     </form>
 </div>

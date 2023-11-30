@@ -1,15 +1,15 @@
 ﻿@model SkinsSite.Models.Skin
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Detalhes";
 }
 
-<h1>Details</h1>
+<h1>Detalhes</h1>
 
 <div>
     <h4>Skin</h4>
     <hr />
-    <dl class="row">
+    @*<dl class="row">
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Tipo)
         </dt>
@@ -63,7 +63,7 @@
             @Html.DisplayNameFor(model => model.ImagemNome)
         </dt>
         <dd class="col-sm-9">
-            <img src="~/images/produtos/@Model.ImagemNome" alt="Imagem do Produto" />
+            <img class="img-thumbnail" width="50%" height="50%" src="~/images/produtos/@Model.ImagemNome" alt="Imagem do Produto" />
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.IsSkinPreferida)
@@ -83,9 +83,103 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Categoria.CategoriaNome)
         </dd>
-    </dl>
+    </dl>*@
+
+    <table class="table table-striped">
+        <tbody>
+            <tr>
+                <th scope="row">Descrição</th>
+                <td>@Html.DisplayFor(model => model.DescricaoCurta)</td>
+            </tr>
+            <tr>
+                <th scope="row">Imagem</th>
+                <td><img class="img-thumbnail" width="30%" height="30%" src="~/images/produtos/@Model.ImagemNome" alt="Imagem do Produto" /></td>
+            </tr>
+            <tr>
+                <th scope="row">Tipo</th>
+                <td>@Html.DisplayFor(model => model.Tipo)</td>
+            </tr>
+            <tr>
+                <th scope="row">Nome</th>
+                <td>@Html.DisplayFor(model => model.Nome)</td>
+            </tr>
+            <tr>
+                <th scope="row">Imagem</th>
+                <td>
+                    @{
+                        string estadoCompleto = string.Empty;
+
+                        switch (Model.Estado)
+                        {
+                            case "BS":
+                                estadoCompleto = "Battle-Scarred";
+                                break;
+                            case "WW":
+                                estadoCompleto = "Well-Worn";
+                                break;
+                            case "FT":
+                                estadoCompleto = "Field-Tested";
+                                break;
+                            case "MW":
+                                estadoCompleto = "Minimal Wear";
+                                break;
+                            case "FN":
+                                estadoCompleto = "Factory New";
+                                break;
+                            default:
+                                estadoCompleto = "-";
+                                break;
+                        }
+
+                        string floatFormatado = Model.SkinFloat.ToString();
+
+                        if (Model.Estado == "FN")
+                        {
+                            floatFormatado = "0,0" + Model.SkinFloat;
+                        }
+                        else if (Model.Estado == "MW" && floatFormatado[0] != '1')
+                        {
+                            floatFormatado = "0,0" + Model.SkinFloat;
+                        }
+                        else
+                        {
+                            floatFormatado = "0," + Model.SkinFloat;
+                        }
+
+                        string exibicaoFinal = Model.Multiplas ? "Aleatório" : floatFormatado;
+                    }
+                    @estadoCompleto
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">Categoria</th>
+                <td>@Html.DisplayFor(model => model.Categoria.CategoriaNome)</td>
+            </tr>
+            <tr>
+                <th scope="row">Float</th>
+                <td>@exibicaoFinal</td>
+            </tr>
+            <tr>
+                <th scope="row">Detalhes</th>
+                <td>@Html.DisplayFor(model => model.DescricaoDetalhada)</td>
+            </tr>
+            <tr>
+                <th scope="row">Preço</th>
+                <td class="text-success" style="font-weight: bold">R$ @Html.DisplayFor(model => model.Preco)</td>
+            </tr>
+            <tr>
+                <th scope="row">Preferida?</th>
+                <td>@Html.DisplayFor(model => model.IsSkinPreferida)</td>
+            </tr>
+            <tr>
+                <th scope="row">Estoque</th>
+                <td>@Html.DisplayFor(model => model.EmEstoque)</td>
+            </tr>
+        </tbody>
+    </table>
+
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.SkinId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a class="btn btn-primary mx-2" asp-action="Edit" asp-route-id="@Model?.SkinId">Editar</a>
+    <a class="btn btn-success" asp-action="Index">Retornar</a>
 </div>

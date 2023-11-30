@@ -1,10 +1,10 @@
 ﻿@model SkinsSite.Models.Cupom
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Editar";
 }
 
-<h1>Edit</h1>
+<h1>Editar</h1>
 
 <h4>Cupom</h4>
 <hr />
@@ -39,12 +39,9 @@
                 <span asp-validation-for="LimiteUso" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Edit" class="btn btn-primary" />
+                <input type="submit" value="Edit" class="btn btn-primary mt-2" />
+                <a class="btn btn-success mt-2" asp-action="Index">Retornar</a>
             </div>
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
 </div>

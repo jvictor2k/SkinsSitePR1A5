@@ -38,7 +38,7 @@ namespace SkinsSite.Areas.Admin.Controllers
 
             if(!string.IsNullOrWhiteSpace(filter))
             {
-                resultado = resultado.Where(p => p.Nome.Contains(filter));
+                resultado = resultado.Where(p => p.DescricaoCurta.Contains(filter));
             }
 
             var model = await PagingList.CreateAsync(resultado, 6, pageindex, sort, "Nome");

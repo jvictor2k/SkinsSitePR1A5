@@ -6,32 +6,34 @@
 
 <h1>Skins</h1>
 
-<form method="get" class="form-inline">
-    <input name="filter" class="form-control" placeholder="filtro"
-    value="@Model.RouteValue["Filter"]"/>
-
+<form class="d-flex align-items-center pt-3 py-3" method="get" class="form-inline">
+    <div class="col-6 mx-2">
+        <input name="filter" class="form-control" placeholder="filtro" value="@Model.RouteValue["Filter"]" />
+    </div>
     <button type="submit" class="btn btn-info">Procurar</button>
 </form>
 
-Total de Skins : @Model.TotalRecordCount
+<a asp-action="Create" class="btn btn-info">
+    Criar Nova Skin
+</a>
+
+<h5 class="py-3 pt-3" style="font-weight: bold">
+    Total de Skins : @Model.TotalRecordCount
+</h5>
+
 <div>
     <vc:pager paging-list="@Model"></vc:pager>
 </div>
-
-<p>
-    <a asp-action="Create">Criar nova Skin</a>
-</p>
-
 
 <div class="container">
     <div class="d-flex gap-4 flex-wrap  ">
         @foreach (var item in Model){
          <div class="shadow p-3" style="background-color: #FDFDFD;flex: 1 0 30%;">
-              <h1 style="font-weight: bold" >@Html.DisplayFor(modelItem => item.Tipo)</h1>
+              <h4 class="py-2" style="font-weight: bold" >@Html.DisplayFor(modelItem => item.DescricaoCurta)</h4>
               <p>Nome da Skin: @Html.DisplayFor(modelItem => item.Nome)</p> 
               <p>Estado da Skin: @Html.DisplayFor(modelItem => item.Estado)</p>
               <p>Float da Skin: @Html.DisplayFor(modelItem => item.SkinFloat)</p>
-              <p>Descrição da skin: @Html.DisplayFor(modelItem => item.DescricaoCurta)</p>
+              <p>Descrição da skin: @Html.DisplayFor(modelItem => item.Tipo)</p>
               <p>Preço: @Html.DisplayFor(modelItem => item.Preco)</p>
               <p class="mb-2">Categoria: @Html.DisplayFor(modelItem => item.Categoria.CategoriaNome)</p>
               <div>

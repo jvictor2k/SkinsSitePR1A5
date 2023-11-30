@@ -1,5 +1,15 @@
 ﻿@model IEnumerable<SkinsSite.Models.Cupom>
 
+<style>
+    .minha-tabela td, .minha-tabela th {
+        vertical-align: middle;
+    }
+
+    .sem-quebra {
+        white-space: nowrap;
+    }
+</style>
+
 @{
     ViewData["Title"] = "Index";
 }
@@ -7,9 +17,9 @@
 <h1>Cupons</h1>
 
 <p>
-    <a asp-action="Create">Criar novo cupom</a>
+    <a class="btn btn-info" asp-action="Create">Criar novo cupom</a>
 </p>
-<table class="table">
+<table class="table minha-tabela">
     <thead>
         <tr>
             <th>
@@ -49,10 +59,10 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.LimiteUso)
                 </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.CupomId">Editar</a> |
-                    <a asp-action="Details" asp-route-id="@item.CupomId">Detalhes</a> |
-                    <a asp-action="Delete" asp-route-id="@item.CupomId">Deletar</a>
+                <td class="sem-quebra">
+                    <a class="btn btn-primary" asp-action="Edit" asp-route-id="@item.CupomId">Editar</a>
+                    <a class="btn btn-success" asp-action="Details" asp-route-id="@item.CupomId">Detalhes</a>
+                    <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.CupomId">Deletar</a>
                 </td>
             </tr>
         }
