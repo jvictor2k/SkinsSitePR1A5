@@ -46,7 +46,7 @@ html {
 
 .grid-container {
     display: grid;
-    grid-template-columns: repeat(5, 1fr); /* Cria 5 colunas igualmente espaçadas */
+    grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); /* Altera o tamanho mínimo e máximo das colunas */
     gap: 20px; /* Espaço entre os cards */
 }
 
@@ -56,6 +56,10 @@ html {
     text-align: center;
 }
 
+    .grid-item.checked {
+        background-color: #98FB98; /* Cor de fundo quando a checkbox está marcada */
+    }
+
     .grid-item img {
         max-width: 100%; /* Garante que a imagem não ultrapasse o card */
     }
@@ -64,6 +68,13 @@ html {
         margin-top: 10px;
         font-size: 14px;
     }
+
+@media (max-width: 768px) {
+    /* Modificações para telas menores que 768px */
+    .grid-container {
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    }
+}
 
 @media (min-width: 768px) {
     html {
@@ -90,6 +101,12 @@ html {
 
     .aside-skins, .main-content {
         width: 100% !important;
+    }
+}
+
+@media (min-width: 1025px) {
+    .h-custom {
+        height: 100vh !important;
     }
 }
 

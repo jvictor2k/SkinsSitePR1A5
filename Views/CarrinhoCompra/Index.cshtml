@@ -1,80 +1,176 @@
 ﻿@model CarrinhoCompraViewModel
 
-<div class="container">
-<div class="row">
+<section class="h-100 h-custom" style="background-color: white;">
+    <div class="container py-5 h-100">
+        <div class="row d-flex justify-content-center h-100">
+            <div class="col">
+                <div class="card shadow">
+                    <div class="card-body p-4">
 
-    <div>
-        <h4> Seu carrinho de compras:
-        <img src="~/images/shoppingcart.png"/>
-        </h4>
-    </div>
+                        <div class="row">
 
-    <table class="table table-bordered table-striped">
+                            <div class="col-lg-7">
+                                <h5 class="mb-3">
+                                    <a class="btn btn-primary" asp-controller="Skin" asp-action="List">
+                                        <i class="fas fa-long-arrow-alt-left me-2"></i>Continuar comprando
+                                    </a>
+                                </h5>
+                                <hr>
 
-        <thead>
-            <tr>
-                <th>Quantidade</th>
-                <th>Skin</th>
-                <th class="text-right">Preço</th>
-                <th class="text-right">Subtotal</th>
-                <th></th>
-            </tr>
-        </thead>
+                                <div class="d-flex justify-content-between align-items-center mb-4">
+                                    <div>
+                                        <p class="mb-1">Carrinho de Compras</p>
+                                        <p class="mb-0">Você tem @Model.CarrinhoCompra.CarrinhoCompraItems.Count item(ns) no carrinho</p>
+                                    </div>
+                                </div>
 
-        <tbody>
-            @foreach(var item in Model.CarrinhoCompra.CarrinhoCompraItems)
-            {
-                    <tr>
-                        <td class="text-center nao-quebra">@item.Quantidade</td>
-                        <td class="text-left nao-quebra">@item.Skin.Nome</td>
-                        <td class="text-right nao-quebra">@item.Skin.Preco.ToString("c")</td>
+                                @foreach (var item in Model.CarrinhoCompra.CarrinhoCompraItems)
+                                {
+                                    <div class="card mb-3">
+                                        <div class="card-body">
+                                            <div class="d-flex justify-content-between">
+                                                <div class="d-flex flex-row align-items-center">
+                                                    <div>
+                                                        <img src="~/images/produtos/@item.Skin.ImagemNome"
+                                                             class="img-fluid rounded-3" alt="@item.Skin.DescricaoCurta" style="width: 65px;">
+                                                    </div>
+                                                    <div class="ms-3">
+                                                        <h5>@item.Skin.DescricaoCurta</h5>
+                                                        <p class="small mb-0">
+                                                            @{
+                                                                string estadoCompleto = string.Empty;
 
-                        <td class="nao-quebra">
-                            @if (item.DescontoPreco.HasValue)
-                            {
-                                @($"{item.Quantidade * item.DescontoPreco:c} (-{(item.Quantidade * (item.Skin.Preco - item.DescontoPreco)):c})")
-                            }
-                            else
-                            {
-                                @($"{(item.Quantidade * item.Skin.Preco):c}")
-                            }
-                        </td>
+                                                                switch (item.Skin.Estado)
+                                                                {
+                                                                    case "BS":
+                                                                        estadoCompleto = "Battle-Scarred";
+                                                                        break;
+                                                                    case "WW":
+                                                                        estadoCompleto = "Well-Worn";
+                                                                        break;
+                                                                    case "FT":
+                                                                        estadoCompleto = "Field-Tested";
+                                                                        break;
+                                                                    case "MW":
+                                                                        estadoCompleto = "Minimal Wear";
+                                                                        break;
+                                                                    case "FN":
+                                                                        estadoCompleto = "Factory New";
+                                                                        break;
+                                                                    default:
+                                                                        estadoCompleto = "-";
+                                                                        break;
+                                                                }
 
-                        <td class="text-center nao-quebra">
-                            <a asp-controller="CarrinhoCompra" asp-action="RemoverItemDoCarrinhoCompra"
-                               asp-route-skinId="@item.Skin.SkinId"><img src="~/images/deletar-lixeira.png" height="3%" width="3%"/>
-                            </a>
-                    </tr>
-            }
-        </tbody>
-        <tfoot>
-            <tr>
-                <td colspan="3" class="text-right">Total: </td>
-                <td class="text-right">
-                    @Model.CarrinhoCompraTotal.ToString("c")
-                </td>
-            </tr>
-        </tfoot>
+                                                                string floatFormatado = item.Skin.SkinFloat.ToString();
 
-    </table>
+                                                                if (item.Skin.Estado == "FN")
+                                                                {
+                                                                    floatFormatado = "0,0" + item.Skin.SkinFloat;
+                                                                }
+                                                                else if (item.Skin.Estado == "MW" && floatFormatado[0] != '1')
+                                                                {
+                                                                    floatFormatado = "0,0" + item.Skin.SkinFloat;
+                                                                }
+                                                                else
+                                                                {
+                                                                    floatFormatado = "0," + item.Skin.SkinFloat;
+                                                                }
 
-    <div class="text-right">
-        <form asp-controller="CarrinhoCompra" asp-action="AplicarCupom" method="post" class="form-inline">
-            <input class="form-control-lg" type="text" name="cupomCodigo" placeholder="Código do Cupom">
-            <button type="submit" class="btn btn-success mb-2">Aplicar Cupom</button>
-        </form>
-    </div>
-    <br />
+                                                                string exibicaoFinal = item.Skin.Multiplas ? "Aleatório" : floatFormatado;
+                                                            }
+                                                            @estadoCompleto, @exibicaoFinal
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <div class="d-flex flex-row align-items-center">
+                                                    <a asp-controller="CarrinhoCompra" asp-action="RemoverItemDoCarrinhoCompra" asp-route-skinId="@item.Skin.SkinId">
+                                                        <i class="fas fa-trash-alt"></i>
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="red" class="bi bi-dash-circle-fill" viewBox="0 0 16 16">
+                                                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M4.5 7.5a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1z" />
+                                                        </svg>
+                                                    </a>
+                                                    <div style="width: 60px; margin-left: 10px;">
+                                                        <h5 class="fw-normal mb-0">@item.Quantidade</h5>
+                                                    </div>
+                                                    <div class="text-success" style="font-weight: bold; width: 150px;">
+                                                        <h5 class="mb-0 nao-quebra">
+                                                            @if (item.DescontoPreco.HasValue)
+                                                            {
+                                                                @($"{item.Quantidade * item.DescontoPreco:c}")
+                                                            }
+                                                            else
+                                                            {
+                                                                @($"{(item.Quantidade * item.Skin.Preco):c}")
+                                                            }
+                                                        </h5>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                                <form asp-controller="CarrinhoCompra" asp-action="AplicarCupom" method="post" class="form-inline">
+                                    <input class="form-control-lg" type="text" name="cupomCodigo" placeholder="Código do Cupom">
+                                    <button type="submit" class="btn btn-success btn-block btn-lg mb-2">Aplicar Cupom</button>
+                                </form>
+                            </div>
+                            <div class="col-lg-5">
 
-    <div class="text-right mt-2">
-        <div class="btn-group pt-2">
-            <a class="btn btn-success" asp-controller="Pedido" asp-action="Checkout">Encerrar Pedido</a>
-            &nbsp;&nbsp;&nbsp;
-            <a class="btn btn-primary" asp-controller="Skin" asp-action="List">Continuar Comprando</a>
+                                <div class="card bg-primary text-white rounded-3">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between align-items-center mb-4">
+                                            <h5 class="mb-0">Resumo</h5>
+                                            <img src="~/images/shopping-cart.png"
+                                                 class="img-fluid rounded-3" style="width: 45px;" alt="Carrinho">
+                                        </div>
+
+                                        <hr class="my-4">
+
+                                        <div class="d-flex flex-column mb-4">
+                                            <p class="mb-2">Subtotal</p>
+                                            @foreach (var item in Model.CarrinhoCompra.CarrinhoCompraItems)
+                                            {
+                                                <p class="mb-2">
+                                                    @if (item.DescontoPreco.HasValue)
+                                                    {
+                                                        @($"{item.Quantidade * item.DescontoPreco:c} (-{(item.Quantidade * (item.Skin.Preco - item.DescontoPreco)):c})")
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-ticket-perforated-fill" viewBox="0 0 16 16">
+                                                            <path d="M0 4.5A1.5 1.5 0 0 1 1.5 3h13A1.5 1.5 0 0 1 16 4.5V6a.5.5 0 0 1-.5.5 1.5 1.5 0 0 0 0 3 .5.5 0 0 1 .5.5v1.5a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 11.5V10a.5.5 0 0 1 .5-.5 1.5 1.5 0 1 0 0-3A.5.5 0 0 1 0 6zm4-1v1h1v-1zm1 3v-1H4v1zm7 0v-1h-1v1zm-1-2h1v-1h-1zm-6 3H4v1h1zm7 1v-1h-1v1zm-7 1H4v1h1zm7 1v-1h-1v1zm-8 1v1h1v-1zm7 1h1v-1h-1z" />
+                                                        </svg>
+                                                    }
+                                                    else
+                                                    {
+                                                        @($"{(item.Quantidade * item.Skin.Preco):c}")
+                                                    }
+                                                </p>
+                                            }
+                                        </div>
+
+                                        <div class="d-flex justify-content-between mb-4">
+                                            <p class="mb-2">Total</p>
+                                            <p class="mb-2">@Model.CarrinhoCompraTotal.ToString("c")</p>
+                                        </div>
+
+                                        <a type="button" class="btn btn-info btn-block btn-lg" asp-controller="Pedido" asp-action="Checkout">
+                                            <div class="d-flex justify-content-between">
+                                                <span>Checkout <i class="fas fa-long-arrow-alt-right ms-2"></i></span>
+                                            </div>
+                                        </a>
+
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-</div>
-</div>
+</section>
 
 @{
     var erro = TempData["Erro"] as string;

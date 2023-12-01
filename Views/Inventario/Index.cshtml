@@ -1,6 +1,24 @@
 ﻿@model SkinsSite.Models.Inventario
 @inject SkinsSite.Repositories.Interfaces.IInventarioRepository _inventarioRepository
 
+<style>
+    .crop-container {
+        overflow: hidden;
+        position: relative;
+        width: 100%;
+        padding-top: 100%; /* Aspect ratio 1:1 (altura/largura) */
+    }
+
+    .crop-container img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover; /* Garante que a imagem cubra todo o container mantendo o aspect ratio */
+    }
+</style>
+
 <h2>Inventário</h2>
 <br />
 
@@ -19,10 +37,15 @@
             {
                 var skinDetails = _inventarioRepository.GetSkinDetails(inventarioItem.SkinId);
 
-                <div class="grid-item rounded-1">
-                    <img src="~/images/produtos/@skinDetails.ImagemNome" alt="@skinDetails.DescricaoCurta">
-                    <p>@skinDetails.DescricaoCurta</p>
-                    <div class="form-check form-switch">
+                <div class="grid-item rounded-3 shadow">
+                    <div class="crop-container">
+                        <img class="img-fluid rounded" src="~/images/produtos/@skinDetails.ImagemNome" alt="@skinDetails.DescricaoCurta">
+                    </div>
+                    <p id="item-text" class="m-2 p-2" style="font-weight: bold;">@skinDetails.DescricaoCurta</p>
+                    <button id="sobreModal" class="btn btn-primary w-100 mb-2 pb-2">
+                        Sobre
+                    </button>
+                    <div class="form-check form-switch mt-2 pt-2">
                         <input class="form-check-input" type="checkbox" id="item-@inventarioItem.InventarioItemId" name="itensSelecionados" value="@inventarioItem.InventarioItemId">
                         <label class="form-check-label" for="item-@inventarioItem.InventarioItemId">Solicitar envio</label>
                     </div>
@@ -39,3 +62,19 @@
         <p>Nenhum item de inventário disponível.</p>
     }
 </form>
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $(".grid-container").on("click", ".grid-item", function (event) {
+            if ($(event.target).is(".btn-primary")) {
+                event.preventDefault();
+            } else {
+                var checkbox = $(this).find(".form-check-input");
+                checkbox.prop("checked", !checkbox.prop("checked"));
+                $(this).toggleClass("checked", checkbox.prop("checked"));
+            }
+        });
+    });
+</script>

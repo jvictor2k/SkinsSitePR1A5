@@ -37,7 +37,8 @@
                         </div>
 
                         <div class="col-md-4">
-                            <p class="text-success fs-3"><strong>R$ @Model.SelectedSkin.Preco</strong></p>
+                            
+                            <h2 class="text-success my-4"><strong>R$ @Model.SelectedSkin.Preco</strong></h2>
                             <hr>
                             @using (Html.BeginForm("AdicionarItemNoCarrinhoCompra", "CarrinhoCompra", new { skinId = Model.SelectedSkin.SkinId }, FormMethod.Post))
                             {
@@ -86,7 +87,7 @@
             </div>
             <br>
             <div class="col-md-12">
-                <div style="overflow: auto; gap: 8px;" class="d-flex w-100 flex-wrap container-items col-md-4">
+                <div style="overflow: auto; gap: 8px;" class="d-flex w-100 flex-wrap container-items col-md-4 justify-content-center">
                     @foreach (var skin in Model.AdditionalSkins)
                     {
                         <partial name="_SkinsResumo" for="@skin" />
