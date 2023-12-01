@@ -6,8 +6,12 @@ html {
   font-size: 14px;
 }
 
+.nao-quebra {
+    white-space: nowrap;
+}
+
 .card-produto {
-    width: 32.76%;
+    width: 32.73%;
 }
 
 .rect-img-container {

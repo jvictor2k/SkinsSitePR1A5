@@ -12,7 +12,7 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-dark bg-dark border-bottom box-shadow mb-3">
             <div class="container-fluid">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
                     <img src="~/images/LOGO.png" height="8%" width="8%" alt="Logo" class="rounded" />
@@ -23,13 +23,12 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    @await Component.InvokeAsync("CategoriaMenu")
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            @await Component.InvokeAsync("CategoriaMenu")
                         </li>
                         <li class="nav-item">
-                            @*<a class="nav-link text-light" asp-area="" asp-controller="skin" asp-action="List">Skin</a>*@
+                            <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li>
                             <a class="nav-link text-light" asp-area="" asp-controller="Contato" asp-action="Index">Contato</a>
@@ -44,14 +43,14 @@
                             </li>
 
                         }
-                        <li>
-                            <form class="navbar-form navbar-right" asp-controller="Skin" asp-action="Search" method="get">
+                        <li class="nav-item">
+                            <form class="form-inline navbar-right" asp-controller="Skin" asp-action="Search" method="get">
                                 <div class="form-group">
                                     <input type="text" class="form-control" placeholder="Procurar produto" name="searchString" value="@ViewData["searchString"]" />
                                 </div>
                             </form>
                         </li>
-                        <li>
+                        <li class="nav-item">
                             @await Html.PartialAsync("_LoginPartial")
                         </li>
                         @if (User.IsInRole("Admin"))

@@ -1,12 +1,12 @@
 ﻿@model DetailsViewModel
 <div class="container mt-5">
     <div class="row">
-        <div class="col-md-8 mx-auto">
+        <div class="col-md-12 mx-auto">
             <div class="card h-100 shadow">
                 <div class="card-body p-4">
                     <div class="row">
                         <!-- Imagem do Produto -->
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <div class="rect-img-container">
                                 <img src="~/images/produtos/@Model.SelectedSkin.ImagemNome"
                                      alt="@Model.SelectedSkin.DescricaoCurta" class="rect-img" data-bs-toggle="modal" data-bs-target="#imagemModal">
@@ -27,7 +27,7 @@
                             </div>
                         </div>
 
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <br>
                             <h2>@Model.SelectedSkin.DescricaoCurta</h2>
                             <hr class="my-4">
@@ -36,50 +36,44 @@
                             </p>
                         </div>
 
+                        <div class="col-md-4">
+                            <p class="text-success fs-3"><strong>R$ @Model.SelectedSkin.Preco</strong></p>
+                            <hr>
+                            @using (Html.BeginForm("AdicionarItemNoCarrinhoCompra", "CarrinhoCompra", new { skinId = Model.SelectedSkin.SkinId }, FormMethod.Post))
+                            {
+                                <div class="mb-3">
+                                    <label for="quantidade" class="form-label">Quantidade:</label>
+                                    <div class="input-group">
+                                        <button type="button" class="btn btn-danger" onclick="decrementarQuantidade()">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-dash-circle-fill" viewBox="0 0 16 16">
+                                                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M4.5 7.5a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1z" />
+                                            </svg>
+                                        </button>
+                                        <input type="number" id="quantidade" name="quantidade" class="form-control text-center"
+                                               value="1" min="1" max="@Model.SelectedSkin.EmEstoque">
+                                        <button type="button" class="btn btn-success" onclick="incrementarQuantidade()">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
+                                                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
+                                <button class="btn btn-info" type="submit">
+                                    Incluir no Carrinho
+                                    <img src="~/images/shopping-cart.png" width="5%" height="5%" />
+                                </button>
+                            }
+                        </div>
+
                     </div>
                 </div>
             </div>
         </div>
         <br>
-        <div class="col-md-4 mx-auto">
-            <div class="card h-100 shadow">
-                <br>
-                <div class="card-body p-4">
-                    <div class="row">
-                        <p class="text-success fs-3"><strong>R$ @Model.SelectedSkin.Preco</strong></p>
-                        <hr>
-                        @using (Html.BeginForm("AdicionarItemNoCarrinhoCompra", "CarrinhoCompra", new { skinId = Model.SelectedSkin.SkinId }, FormMethod.Post))
-                        {
-                            <div class="mb-3">
-                                <label for="quantidade" class="form-label">Quantidade:</label>
-                                <div class="input-group">
-                                    <button type="button" class="btn btn-danger" onclick="decrementarQuantidade()">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-dash-circle-fill" viewBox="0 0 16 16">
-                                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M4.5 7.5a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1z" />
-                                        </svg>
-                                    </button>
-                                    <input type="number" id="quantidade" name="quantidade" class="form-control text-center"
-                                           value="1" min="1" max="@Model.SelectedSkin.EmEstoque">
-                                    <button type="button" class="btn btn-success" onclick="incrementarQuantidade()">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
-                                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z" />
-                                        </svg>
-                                    </button>
-                                </div>
-                            </div>
-                            <button class="btn btn-info" type="submit">
-                                Incluir no Carrinho
-                                <img src="~/images/shopping-cart.png" width="5%" height="5%" />
-                            </button>
-                        }
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
     <div class="row mt-4">
         <div class="col-md-12">
-            <div class="container px-4 text-left bg-dark rounded">
+            <div class="container px-4 text-left bg-dark rounded col-md-12">
                 <div class="row gx-5">
                     <div class="col">
                         <div class="p-3">
@@ -91,13 +85,15 @@
                 </div>
             </div>
             <br>
-            <div style="overflow: auto; gap: 8px;" class="d-flex w-100 flex-wrap container-items">
-                @foreach (var skin in Model.AdditionalSkins)
-                {
-                    <partial name="_SkinsResumo" for="@skin" />
-                }
+            <div class="col-md-12">
+                <div style="overflow: auto; gap: 8px;" class="d-flex w-100 flex-wrap container-items col-md-4">
+                    @foreach (var skin in Model.AdditionalSkins)
+                    {
+                        <partial name="_SkinsResumo" for="@skin" />
+                    }
+                </div>
             </div>
-            <div class="container px-4 text-left bg-dark rounded">
+            <div class="container px-4 text-left bg-dark rounded col-md-12">
                 <div class="row gx-5">
                     <div class="col">
                         <div class="p-3">

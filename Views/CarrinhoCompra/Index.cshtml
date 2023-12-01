@@ -25,11 +25,11 @@
             @foreach(var item in Model.CarrinhoCompra.CarrinhoCompraItems)
             {
                     <tr>
-                        <td class="text-center">@item.Quantidade</td>
-                        <td class="text-left">@item.Skin.Nome</td>
-                        <td class="text-right">@item.Skin.Preco.ToString("c")</td>
+                        <td class="text-center nao-quebra">@item.Quantidade</td>
+                        <td class="text-left nao-quebra">@item.Skin.Nome</td>
+                        <td class="text-right nao-quebra">@item.Skin.Preco.ToString("c")</td>
 
-                        <td>
+                        <td class="nao-quebra">
                             @if (item.DescontoPreco.HasValue)
                             {
                                 @($"{item.Quantidade * item.DescontoPreco:c} (-{(item.Quantidade * (item.Skin.Preco - item.DescontoPreco)):c})")
@@ -40,7 +40,7 @@
                             }
                         </td>
 
-                        <td class="text-center">
+                        <td class="text-center nao-quebra">
                             <a asp-controller="CarrinhoCompra" asp-action="RemoverItemDoCarrinhoCompra"
                                asp-route-skinId="@item.Skin.SkinId"><img src="~/images/deletar-lixeira.png" height="3%" width="3%"/>
                             </a>
@@ -59,15 +59,15 @@
     </table>
 
     <div class="text-right">
-        <form asp-controller="CarrinhoCompra" asp-action="AplicarCupom" method="post">
-            <input type="text" name="cupomCodigo" placeholder="Código do cupom">
-            <button type="submit" class="btn btn-success">Aplicar Cupom</button>
+        <form asp-controller="CarrinhoCompra" asp-action="AplicarCupom" method="post" class="form-inline">
+            <input class="form-control-lg" type="text" name="cupomCodigo" placeholder="Código do Cupom">
+            <button type="submit" class="btn btn-success mb-2">Aplicar Cupom</button>
         </form>
     </div>
     <br />
 
-    <div class="text-right">
-        <div class="btn-group">
+    <div class="text-right mt-2">
+        <div class="btn-group pt-2">
             <a class="btn btn-success" asp-controller="Pedido" asp-action="Checkout">Encerrar Pedido</a>
             &nbsp;&nbsp;&nbsp;
             <a class="btn btn-primary" asp-controller="Skin" asp-action="List">Continuar Comprando</a>
