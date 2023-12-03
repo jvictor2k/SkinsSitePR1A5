@@ -25,107 +25,203 @@
 <h1>Todos os Itens em Inventários</h1>
 <br />
 
-@if (Model != null)
+@if (TempData.ContainsKey("MensagemSucesso"))
 {
-    <div class="grid-container">
-        @foreach (var item in Model)
-        {
-            <div class="grid-item rounded-3 shadow">
-                <div class="crop-container">
-                    <img class="img-fluid rounded" src="~/images/produtos/@item.Skin.ImagemNome" alt="@item.Skin.DescricaoCurta">
+    <div class="alert alert-success" role="alert">
+        @TempData["MensagemSucesso"]
+    </div>
+}
+
+<form method="post" asp-action="ConfirmarEnvios">
+    @if (Model != null)
+    {
+        <div class="form-group">
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#confirmacaoModal">
+                Confirmar Envios
+            </button>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="confirmacaoModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Confirmar Envios?</h5>
+                        <button type="button" class="btn-close" aria-label="Close" id="fecharConfirmacaoModal"></button>
+                    </div>
+                    <div class="modal-body text-start mx-3">
+                        <b>Clique em Confirmar para registrar a entrega dos itens selecionados.</b>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                        <button type="submit" class="btn btn-primary">Confirmar</button>
+                    </div>
                 </div>
-                <p id="item-text" class="m-2 p-2" style="font-weight: bold;">@item.Skin.DescricaoCurta</p>
-                @if (item.InventarioItem.Solicitado == true)
-                {
-                    <!-- Button trigger modal -->
-                    <button type="button" class="btn btn-success w-100 mb-2 pb-2" data-bs-toggle="modal" data-bs-target="#modal_@item.InventarioItem.InventarioItemId">
-                        Solicitado
-                    </button>
+            </div>
+        </div>
 
-                    <!-- Modal -->
-                    <div class="modal fade" id="modal_@item.InventarioItem.InventarioItemId" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">Informações de Envio</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body text-start mx-3">
+        <br>
 
-                                    @{
-                                        string estadoCompleto = string.Empty;
+        <div class="grid-container">
+            @foreach (var item in Model)
+            {
+                var checkboxId = $"item-{item.InventarioItem.InventarioItemId}";
 
-                                        switch (item.Skin.Estado)
-                                        {
-                                            case "BS":
-                                                estadoCompleto = "Battle-Scarred";
-                                                break;
-                                            case "WW":
-                                                estadoCompleto = "Well-Worn";
-                                                break;
-                                            case "FT":
-                                                estadoCompleto = "(ield-Tested";
-                                                break;
-                                            case "MW":
-                                                estadoCompleto = "Minimal Wear";
-                                                break;
-                                            case "FN":
-                                                estadoCompleto = "Factory New";
-                                                break;
-                                            default:
-                                                estadoCompleto = "-";
-                                                break;
+                <div class="grid-item rounded-3 shadow">
+                    <div class="crop-container">
+                        <img class="img-fluid rounded" src="~/images/produtos/@item.Skin.ImagemNome" alt="@item.Skin.DescricaoCurta">
+                    </div>
+                    <p id="item-text" class="m-2 p-2" style="font-weight: bold;">@item.Skin.DescricaoCurta</p>
+                    @if (item.InventarioItem.Solicitado == true)
+                    {
+                        <!-- Button trigger modal -->
+                        @if(item.InventarioItem.ItemEntregueEm.HasValue)
+                        {
+                            <button type="button" class="btn btn-danger w-100 mb-2 pb-2" data-bs-toggle="modal" data-bs-target="#modal_@item.InventarioItem.InventarioItemId">
+                                Entregue
+                            </button>
+                        }
+                        else
+                        {
+                            <button type="button" class="btn btn-success w-100 mb-2 pb-2" data-bs-toggle="modal" data-bs-target="#modal_@item.InventarioItem.InventarioItemId">
+                                Solicitado
+                            </button>
+                        }
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="modal_@item.InventarioItem.InventarioItemId" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Informações de Envio</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body text-start mx-3">
+
+                                        @{
+                                            string estadoCompleto = string.Empty;
+
+                                            switch (item.Skin.Estado)
+                                            {
+                                                case "BS":
+                                                    estadoCompleto = "Battle-Scarred";
+                                                    break;
+                                                case "WW":
+                                                    estadoCompleto = "Well-Worn";
+                                                    break;
+                                                case "FT":
+                                                    estadoCompleto = "Field-Tested";
+                                                    break;
+                                                case "MW":
+                                                    estadoCompleto = "Minimal Wear";
+                                                    break;
+                                                case "FN":
+                                                    estadoCompleto = "Factory New";
+                                                    break;
+                                                default:
+                                                    estadoCompleto = "-";
+                                                    break;
+                                            }
+
+                                            string floatFormatado = item.Skin.SkinFloat.ToString();
+
+                                            if (item.Skin.Estado == "FN")
+                                            {
+                                                floatFormatado = "0,0" + item.Skin.SkinFloat;
+                                            }
+                                            else if (item.Skin.Estado == "MW" && floatFormatado[0] != '1')
+                                            {
+                                                floatFormatado = "0,0" + item.Skin.SkinFloat;
+                                            }
+                                            else
+                                            {
+                                                floatFormatado = "0," + item.Skin.SkinFloat;
+                                            }
+
+                                            string exibicaoFinal = item.Skin.Multiplas ? "Aleatório" : floatFormatado;
                                         }
 
-                                        string floatFormatado = item.Skin.SkinFloat.ToString();
-
-                                        if (item.Skin.Estado == "FN")
-                                        {
-                                            floatFormatado = "0,0" + item.Skin.SkinFloat;
-                                        }
-                                        else if (item.Skin.Estado == "MW" && floatFormatado[0] != '1')
-                                        {
-                                            floatFormatado = "0,0" + item.Skin.SkinFloat;
-                                        }
-                                        else
-                                        {
-                                            floatFormatado = "0," + item.Skin.SkinFloat;
-                                        }
-
-                                        string exibicaoFinal = item.Skin.Multiplas ? "Aleatório" : floatFormatado;
-                                    }
-
-                                    <h5>@item.Skin.DescricaoCurta</h5>
-                                    <br>
-                                    <p>Float: @exibicaoFinal</p>
-                                    <p>@("Pedido: " + item.Pedido.PedidoId)</p>
-                                    <p>@("Cliente: " + item.Pedido.Nome + " " + item.Pedido.Sobrenome)</p>
-                                    <p>@("Telefone: " + item.Pedido.Telefone)</p>
-                                    <p>@("Email: " + item.Pedido.Email)</p>
-                                    <br>
-                                    <b>Trade Link da Steam:</b>
-                                    <br>
-                                    <br>
-                                    <p>@item.InventarioItem.TradeLink</p>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                                        <h5>@item.Skin.DescricaoCurta</h5>
+                                        <br>
+                                        <p>Float: @exibicaoFinal</p>
+                                        <p>@("Pedido: " + item.Pedido.PedidoId)</p>
+                                        <p>@("Cliente: " + item.Pedido.Nome + " " + item.Pedido.Sobrenome)</p>
+                                        <p>@("Telefone: " + item.Pedido.Telefone)</p>
+                                        <p>@("Email: " + item.Pedido.Email)</p>
+                                        <br>
+                                        <b>Trade Link da Steam:</b>
+                                        <br>
+                                        <br>
+                                        <p>@item.InventarioItem.TradeLink</p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+
+                        <div class="form-check form-switch mt-2 pt-2">
+                            <input class="form-check-input" type="checkbox" id="@checkboxId" name="itensSelecionados" value="@item.InventarioItem.InventarioItemId" @(item.InventarioItem.ItemEntregueEm.HasValue ? "disabled" : "")>
+                            <label class="form-check-label" for="@checkboxId">Confirmar Envio</label>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="alert alert-light" role="alert">
+                            Não solicitado
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <p>Nenhum item de inventário disponível.</p>
+    }
+</form>
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        var modalOpen = false; // Variável para rastrear o estado do modal
+
+        // Evento ao abrir o modal
+        $(".grid-container").on("show.bs.modal", function () {
+            modalOpen = true;
+        });
+
+        // Evento ao fechar o modal
+        $(".grid-container").on("hidden.bs.modal", function () {
+            modalOpen = false;
+        });
+
+        $(".grid-container").on("click", ".grid-item", function (event) {
+            var isButton = $(event.target).is(".btn-primary") || $(event.target).is(".close-modal-btn");
+            var isCheckbox = $(event.target).is(".form-check-input") || $(event.target).is(".form-check-label");
+            var isDisabled = $(this).find(".form-check-input").prop("disabled");
+
+            // Verifica se o clique ocorreu diretamente em elementos específicos
+            // e se o modal não está aberto
+            if (!modalOpen && !isButton && !isDisabled) {
+                var checkbox = $(this).find(".form-check-input");
+                checkbox.prop("checked", !checkbox.prop("checked"));
+
+                // Verifica se o clique não foi diretamente na checkbox ou no rótulo
+                if (!isCheckbox) {
+                    $(this).toggleClass("checked", checkbox.prop("checked") && !checkbox.prop("disabled"));
                 }
-                else
-                {
-                    <div class="alert alert-light" role="alert">
-                        Não solicitado
-                    </div>
-                }
-            </div>
-        }
-    </div>
-}
-else
-{
-    <p>Nenhum item de inventário disponível.</p>
-}
+            }
+        });
+    });
+</script>
+
+<script>
+    $(document).ready(function () {
+        $("#fecharModal, #fecharConfirmacaoModal").click(function () {
+            $('#confirmacaoModal').modal('hide');
+        });
+    });
+</script>
