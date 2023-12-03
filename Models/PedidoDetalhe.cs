@@ -12,6 +12,7 @@ namespace SkinsSite.Models
         [Column(TypeName = "decimal(18,2)")]
         public decimal Preco { get; set; }
         public decimal? Desconto { get; set; }
+        public DateTime? PedidoDetalheEntregueEm { get; set; }
 
         public virtual Skin Skin { get; set; }
         public virtual Pedido Pedido { get; set; }
