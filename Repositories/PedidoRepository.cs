@@ -52,7 +52,8 @@ namespace SkinsSite.Repositories
                         SkinId = carrinhoItem.Skin.SkinId,
                         Preco = carrinhoItem.DescontoPreco ?? carrinhoItem.Skin.Preco,
                         Desconto = descontoItem,
-                        PedidoDetalheId = pedidoDetailId
+                        PedidoDetalheId = pedidoDetailId,
+                        TradeLink = pedido.TradeLink
                     };
 
                     //Encontra ou cria um inventário para o usuário com base no userId

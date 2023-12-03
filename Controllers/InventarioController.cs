@@ -1,8 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using SkinsSite.Context;
+using SkinsSite.Models;
 using SkinsSite.Repositories.Interfaces;
+using SkinsSite.ViewModels;
 
 namespace SkinsSite.Controllers
 {
@@ -31,7 +34,7 @@ namespace SkinsSite.Controllers
         }
 
         [HttpPost]
-        public IActionResult EnviarSolicitacoes(int[] itensSelecionados)
+        public IActionResult EnviarSolicitacoes(int[] itensSelecionados, string novoTradeLink)
         {
             if (itensSelecionados != null && itensSelecionados.Length > 0)
             {
@@ -42,6 +45,10 @@ namespace SkinsSite.Controllers
                     if (inventarioItem != null)
                     {
                         inventarioItem.Solicitado = true;
+                        if(novoTradeLink != null)
+                        {
+                            inventarioItem.TradeLink = novoTradeLink;
+                        }
                     }
                 }
 
