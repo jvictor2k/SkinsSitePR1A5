@@ -2,6 +2,8 @@
 using SkinsSite.Models;
 using SkinsSite.Context;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using iText.Commons.Actions.Contexts;
 
 namespace SkinsSite.Repositories
 {
@@ -55,6 +57,12 @@ namespace SkinsSite.Repositories
                         PedidoDetalheId = pedidoDetailId,
                         TradeLink = pedido.TradeLink
                     };
+
+                    var skin = _appDbContext.Skins.FirstOrDefault(s => s.SkinId == carrinhoItem.Skin.SkinId);
+
+                    skin.EmEstoque -= 1;
+
+                    _appDbContext.Entry(skin).State = EntityState.Modified;
 
                     //Encontra ou cria um inventário para o usuário com base no userId
                     var inventario = _appDbContext.Inventarios

@@ -17,11 +17,22 @@
                    asp-route-skinId="@Model.SkinId" style="text-decoration: none;">@Model.DescricaoCurta</a>
             </h5>
             <br />
-            <a class="btn btn-info" asp-controller="CarrinhoCompra"
-               asp-action="AdicionarItemNoCarrinhoCompra" asp-route-SkinId="@Model.SkinId" asp-route-Quantidade="1">
-               Incluir no Carrinho
-               <img src="~/images/shopping-cart.png" width="5%" height="5%" />
-           </a>
+            @if(Model.EmEstoque > 0)
+            {
+                <a class="btn btn-info" asp-controller="CarrinhoCompra"
+                   asp-action="AdicionarItemNoCarrinhoCompra" asp-route-SkinId="@Model.SkinId" asp-route-Quantidade="1">
+                    Incluir no Carrinho
+                    <img src="~/images/shopping-cart.png" width="5%" height="5%" />
+                </a>
+            }
+            else
+            {
+                <a class="btn btn-danger" asp-controller="Skin"
+                   asp-action="Details" asp-route-SkinId="@Model.SkinId" asp-route-Quantidade="1">
+                    Indisponível
+                    <img src="~/images/error1.png" width="5%" height="5%" />
+                </a>
+            }
         </div>
     </div>
     <br />

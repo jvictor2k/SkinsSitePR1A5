@@ -18,6 +18,8 @@
             <br />
             <button type="submit" class="btn btn-success">Filtrar</button>
         </form>
+        <br />
+        <a asp-action="ExportarRelatorioVendasComCupons" asp-route-minDate="@ViewData["minDate"]" asp-route-maxDate="@ViewData["maxDate"]">Exportar para PDF</a>
     </div>
 </nav>
 

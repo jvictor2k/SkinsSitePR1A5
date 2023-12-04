@@ -13,32 +13,49 @@
                 <label for="maxDate">Data Final</label>
                 <input type="date" class="form-control" name="maxDate" value=@ViewData["maxDate"] />
             </div>
-            <br />
-            <button type="submit" class="btn btn-success">Filtrar</button>
+            <button type="submit" class="btn btn-success mt-3">Filtrar</button>
         </form>
     </div>
 </nav>
 
-@{
-    var skinsMaisVendidas = Model
-        .GroupBy(pd => pd.SkinId)
-        .Select(grp => new { SkinId = grp.Key, Vendas = grp.Sum(s => s.Quantidade), PedidoDetalhes = grp.ToList() });
-}
+<a class="btn btn-primary m-2" asp-action="ExportarRelatorioSkinsMaisVendidas" asp-route-minDate="@ViewData["minDate"]" asp-route-maxDate="@ViewData["maxDate"]">Download PDF</a>
 
-@foreach (var skin in skinsMaisVendidas)
-{
-    <h3>@skin.SkinId - Vendas: @skin.Vendas</h3>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th scope="col">
+                Skin ID
+            </th>
+            <th scope="col">
+                Descrição
+            </th>
+            <th scope="col">
+                Preço
+            </th>
+            <th scope="col">
+                Quantidade Vendida
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var skin in Model.GroupBy(pd => pd.SkinId).Select(grp => new { SkinId = grp.Key, Vendas = grp.Sum(s => s.Quantidade) }))
+        {
+            var skinItem = Model.First(pd => pd.SkinId == skin.SkinId).Skin;
 
-    foreach (var pedidoDetalhe in skin.PedidoDetalhes)
-    {
-        var pedido = pedidoDetalhe.Pedido;
-        var skinItem = pedidoDetalhe.Skin;
-
-        <h4>Skin ID: @skinItem.SkinId</h4>
-        <p>Nome: @skinItem.Nome</p>
-        <p>Preço: @pedidoDetalhe.Preco</p>
-        <p>Quantidade Vendida: @pedidoDetalhe.Quantidade</p>
-        <!-- Outros detalhes da Skin ou do PedidoDetalhe que você deseja exibir -->
-        <hr />
-    }
-}
+            <tr>
+                <th scope="row">
+                    @skin.SkinId
+                </th>
+                <th>
+                   @skinItem.DescricaoCurta
+                </th>
+                <th>
+                    @skinItem.Preco
+                </th>
+                <th>
+                    @skin.Vendas
+                </th>
+            </tr>
+        }
+    </tbody>
+</table>
