@@ -20,7 +20,7 @@
                     <td>@pedido.PedidoId</td>
                     <td>@pedido.PedidoEnviado.ToString("dd/MM/yyyy HH:mm")</td>
                     <td>@pedido.PedidoTotal.ToString("C2")</td>
-                    <td><a class="btn btn-primary">Ver</a></td>
+                    <td><a asp-action="VerDetalhes" asp-controller="Pedido" asp-route-id="@pedido.PedidoId" class="btn btn-primary">Ver</a></td>
                 </tr>
             }
         </tbody>

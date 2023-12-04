@@ -145,7 +145,7 @@ namespace SkinsSite.Controllers
                 {
                     new PreferenceItemRequest
                     {
-                        Title = "Skins",
+                        Title = "SkinsSite - Pedido #" + pedido.PedidoId,
                         Quantity = 1,
                         CurrencyId = "BRL",
                         UnitPrice = pedido.PedidoTotal,

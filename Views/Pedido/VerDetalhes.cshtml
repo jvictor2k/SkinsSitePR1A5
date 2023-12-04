@@ -1,0 +1,82 @@
+﻿@model SkinsSite.ViewModels.PedidoSkinViewModel
+
+
+
+@{
+    ViewData["Title"] = "PedidoSkins";
+}
+
+<div class="container"> 
+    <h2>Skins do Pedido</h2>
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <h5>Pedido: @Html.DisplayFor(model => @Model.Pedido.PedidoId)</h5>
+        </div>
+        <div class="col-md-4">
+            <h5>Data: @Html.DisplayFor(model => @Model.Pedido.PedidoEnviado)</h5>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        @if(Model.Pedido.PedidoEntregueEm != null)
+        {
+            <div class="col-md-4">
+                <h5>Entrega: @Html.DisplayFor(model => @Model.Pedido.PedidoEntregueEm)</h5>
+            </div>
+        }
+        else
+        {
+            <div class="col-md-4">
+                <h5>Entrega: Aguarde</h5>
+            </div>
+        }
+
+        @if(Model.Pedido.CuponsAplicados.Any())
+        {
+            <div class="col-md-4">
+                <h5>Cupons: @Html.DisplayFor(model => @Model.Pedido.CuponsAplicados)</h5>
+            </div>
+        }
+    </div>
+
+    <br />
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col" style="font-weight: bold;">Nome/Descrição</th>
+                    <th scope="col" style="font-weight: bold;">Imagem</th>
+                    <th scope="col" style="font-weight: bold;">Preço</th>
+                    <th scope="col" style="font-weight: bold;">Quantidade</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in @Model.Pedido.PedidoItens)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => item.Skin.DescricaoCurta)</td>
+                        <td><img src="~/images/produtos/@item.Skin.ImagemNome" class="img-fluid" height="100" width="100"></td>
+                        <td class="text-success" style="font-weight: bold;">@string.Format("{0:C}", item.Skin.Preco)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Quantidade)</td>
+                    </tr>
+                }
+                <tr>
+                    <th colspan="6">
+                        <h4 class="mt-2 text-success" style="font-weight: bold;" align="right">Total: @string.Format("{0:C}", Model.Pedido.PedidoTotal)</h4>
+                    </th>
+                </tr>
+                @if (Model.Pedido.CuponsAplicados.Any())
+                {
+                    <tr>
+                        <th colspan="6">
+                            <h4 class="mt-2 text-success" style="font-weight: bold;" align="right">Desconto: @string.Format("{0:C}", Model.Pedido.DescontoTotal)</h4>
+                        </th>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <a asp-action="HistoricoPedidos" asp-controller="Pedido" class="btn btn-info">Retornar</a>
+</div>
